@@ -1,2 +1,6 @@
 PyQt5>=5.15
 keyboard>=0.13
+mss>=9.0
+pytesseract>=0.3
+opencv-python>=4.9
+Pillow>=10.0

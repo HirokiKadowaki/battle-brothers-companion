@@ -1,6 +1,8 @@
 import sys
+import time
 from pathlib import Path
 
+import mss
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QColor, QPainter, QPalette, QPixmap
 from PyQt5.QtWidgets import (
@@ -11,6 +13,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QSpinBox,
     QTableWidget,
@@ -19,10 +22,13 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
+from . import calibration, screen_reader
 from .calculator import RecruitCalculator
 from .data_loader import STATS, STAT_LABELS
 
-HOTKEY = "ctrl+alt+b"
+TOGGLE_HOTKEY = "ctrl+alt+b"
+CAPTURE_HOTKEY = "ctrl+alt+r"
+LOW_CONFIDENCE_THRESHOLD = 0.6
 BACKGROUND_IMAGE = Path(__file__).resolve().parent.parent / "assets" / "keyvisual.jpg"
 
 VERDICT_STYLE = {
@@ -130,8 +136,12 @@ class BackgroundWidget(QWidget):
         super().paintEvent(event)
 
 
+LOW_CONFIDENCE_STYLE = "border: 2px solid #e53935; background-color: rgba(120, 30, 30, 230);"
+
+
 class HotkeyBridge(QObject):
     toggle_signal = pyqtSignal()
+    capture_signal = pyqtSignal()
 
 
 class RecruitWindow(QMainWindow):
@@ -156,9 +166,19 @@ class RecruitWindow(QMainWindow):
         root.addWidget(self._build_input_panel())
         root.addWidget(self._build_results_panel())
 
+        button_row = QHBoxLayout()
         evaluate_btn = QPushButton("Evaluate Recruit")
         evaluate_btn.clicked.connect(self.on_evaluate)
-        root.addWidget(evaluate_btn)
+        button_row.addWidget(evaluate_btn)
+
+        capture_btn = QPushButton(f"Read Recruit From Screen ({CAPTURE_HOTKEY})")
+        capture_btn.clicked.connect(self.capture_and_fill)
+        button_row.addWidget(capture_btn)
+
+        calibrate_btn = QPushButton("Calibrate Screen Regions...")
+        calibrate_btn.clicked.connect(self.on_calibrate)
+        button_row.addWidget(calibrate_btn)
+        root.addLayout(button_row)
 
         self.verdict_label = QLabel("")
         self.verdict_label.setAlignment(Qt.AlignCenter)
@@ -300,15 +320,101 @@ class RecruitWindow(QMainWindow):
             self.raise_()
             self.activateWindow()
 
+    def on_calibrate(self):
+        self.hide()
+        QApplication.processEvents()
+        time.sleep(0.15)
+        calibration.run_calibration_wizard(self)
+        self.show()
+        self.raise_()
+        self.activateWindow()
 
-def register_hotkey(bridge: HotkeyBridge):
+    def _mark_field_confidence(self, widget, confidence: float):
+        widget.setStyleSheet(LOW_CONFIDENCE_STYLE if confidence < LOW_CONFIDENCE_THRESHOLD else "")
+
+    def capture_and_fill(self):
+        if not calibration.screen_regions_exist():
+            QMessageBox.information(
+                self,
+                "Calibration Needed",
+                "No screen regions are calibrated yet. Click 'Calibrate Screen Regions...' first, "
+                "then try Ctrl+Alt+R again on a recruit's hire screen.",
+            )
+            return
+
+        regions = calibration.load_screen_regions()
+        star_template = screen_reader.load_star_template(calibration.STAR_TEMPLATE_PATH)
+
+        for spin in self.stat_current_boxes.values():
+            spin.setStyleSheet("")
+        self.background_combo.setStyleSheet("")
+
+        was_visible = self.isVisible()
+        self.hide()
+        QApplication.processEvents()
+        time.sleep(0.15)
+
+        try:
+            star_hits = []
+            with mss.mss() as sct:
+                bg_box = regions.get("background_name")
+                if bg_box:
+                    img = screen_reader.capture_region(sct, bg_box)
+                    result = screen_reader.read_background_name(img, self.calc.background_names())
+                    if result.value:
+                        idx = self.background_combo.findText(result.value)
+                        if idx >= 0:
+                            self.background_combo.setCurrentIndex(idx)
+                    if result.value is None or result.confidence < LOW_CONFIDENCE_THRESHOLD:
+                        self._mark_field_confidence(self.background_combo, 0.0)
+
+                for stat in STATS:
+                    value_box = regions.get(f"{stat}_value")
+                    if value_box:
+                        img = screen_reader.capture_region(sct, value_box)
+                        result = screen_reader.read_stat_value(img)
+                        self.stat_current_boxes[stat].setValue(result.value)
+                        self._mark_field_confidence(self.stat_current_boxes[stat], result.confidence)
+
+                    star_box = regions.get(f"{stat}_stars")
+                    if star_box:
+                        img = screen_reader.capture_region(sct, star_box)
+                        star_result = screen_reader.count_stars(img, star_template)
+                        if star_result.value > 0:
+                            star_hits.append((stat, star_result.value))
+        finally:
+            if was_visible:
+                self.show()
+                self.raise_()
+                self.activateWindow()
+
+        for i, (combo, spin) in enumerate(zip(self.star_stat_combos, self.star_count_boxes)):
+            if i < len(star_hits):
+                stat, count = star_hits[i]
+                idx = combo.findText(STAT_LABELS[stat])
+                combo.setCurrentIndex(idx if idx >= 0 else 0)
+                spin.setValue(count)
+            else:
+                combo.setCurrentIndex(0)
+                spin.setValue(0)
+
+        self.verdict_label.setText(
+            "Auto-filled from screen capture — please review highlighted fields, then Evaluate."
+        )
+        self.verdict_label.setStyleSheet(
+            "font-size: 14px; font-weight: bold; padding: 6px; color: white; background-color: #455a64;"
+        )
+
+
+def register_hotkeys(bridge: HotkeyBridge):
     try:
         import keyboard
 
-        keyboard.add_hotkey(HOTKEY, lambda: bridge.toggle_signal.emit())
+        keyboard.add_hotkey(TOGGLE_HOTKEY, lambda: bridge.toggle_signal.emit())
+        keyboard.add_hotkey(CAPTURE_HOTKEY, lambda: bridge.capture_signal.emit())
         return True
     except Exception as exc:  # global hotkey hook can fail without admin rights on some setups
-        print(f"Warning: could not register global hotkey ({exc}). Use the tray/window directly instead.")
+        print(f"Warning: could not register global hotkeys ({exc}). Use the on-screen buttons instead.")
         return False
 
 
@@ -322,7 +428,8 @@ def main():
 
     bridge = HotkeyBridge()
     bridge.toggle_signal.connect(window.toggle_visibility, Qt.QueuedConnection)
-    register_hotkey(bridge)
+    bridge.capture_signal.connect(window.capture_and_fill, Qt.QueuedConnection)
+    register_hotkeys(bridge)
 
     window.show()
     sys.exit(app.exec_())
