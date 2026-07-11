@@ -1,6 +1,8 @@
 import sys
+from pathlib import Path
 
 from PyQt5.QtCore import Qt, QObject, pyqtSignal
+from PyQt5.QtGui import QColor, QPainter, QPalette, QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
     QComboBox,
@@ -21,12 +23,111 @@ from .calculator import RecruitCalculator
 from .data_loader import STATS, STAT_LABELS
 
 HOTKEY = "ctrl+alt+b"
+BACKGROUND_IMAGE = Path(__file__).resolve().parent.parent / "assets" / "keyvisual.jpg"
 
 VERDICT_STYLE = {
     "good": ("Good Fit", "#2e7d32"),
     "marginal": ("Marginal", "#f9a825"),
     "poor": ("Poor Fit", "#c62828"),
 }
+
+DARK_STYLESHEET = """
+QGroupBox {
+    background-color: rgba(24, 24, 24, 190);
+    border: 1px solid #555;
+    border-radius: 8px;
+    margin-top: 14px;
+    color: #eee;
+    font-weight: bold;
+}
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 4px;
+    color: #ddd;
+}
+QLabel {
+    color: #eee;
+    background: transparent;
+}
+QComboBox, QSpinBox {
+    background-color: rgba(45, 45, 45, 230);
+    color: #eee;
+    border: 1px solid #666;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+QComboBox QAbstractItemView {
+    background-color: #2d2d2d;
+    color: #eee;
+    selection-background-color: #555;
+}
+QTableWidget {
+    background-color: rgba(18, 18, 18, 210);
+    color: #eee;
+    gridline-color: #555;
+    border: 1px solid #555;
+}
+QHeaderView::section {
+    background-color: #333;
+    color: #eee;
+    border: 1px solid #555;
+    padding: 4px;
+}
+QPushButton {
+    background-color: rgba(60, 60, 60, 230);
+    color: #eee;
+    border: 1px solid #777;
+    border-radius: 4px;
+    padding: 8px;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: rgba(85, 85, 85, 230);
+}
+QPushButton:pressed {
+    background-color: rgba(40, 40, 40, 230);
+}
+"""
+
+
+def build_dark_palette() -> QPalette:
+    palette = QPalette()
+    palette.setColor(QPalette.Window, QColor(30, 30, 30))
+    palette.setColor(QPalette.WindowText, Qt.white)
+    palette.setColor(QPalette.Base, QColor(24, 24, 24))
+    palette.setColor(QPalette.AlternateBase, QColor(45, 45, 45))
+    palette.setColor(QPalette.ToolTipBase, Qt.white)
+    palette.setColor(QPalette.ToolTipText, Qt.white)
+    palette.setColor(QPalette.Text, Qt.white)
+    palette.setColor(QPalette.Button, QColor(45, 45, 45))
+    palette.setColor(QPalette.ButtonText, Qt.white)
+    palette.setColor(QPalette.BrightText, Qt.red)
+    palette.setColor(QPalette.Highlight, QColor(100, 149, 237))
+    palette.setColor(QPalette.HighlightedText, Qt.black)
+    return palette
+
+
+class BackgroundWidget(QWidget):
+    """Central widget that paints a cover-fit wallpaper with a dark scrim behind the panels."""
+
+    def __init__(self, image_path: Path, parent=None):
+        super().__init__(parent)
+        self._pixmap = QPixmap(str(image_path)) if image_path.exists() else None
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        if self._pixmap and not self._pixmap.isNull():
+            scaled = self._pixmap.scaled(
+                self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation
+            )
+            x = (scaled.width() - self.width()) // 2
+            y = (scaled.height() - self.height()) // 2
+            painter.drawPixmap(-x, -y, scaled)
+        else:
+            painter.fillRect(self.rect(), QColor(24, 24, 24))
+        painter.fillRect(self.rect(), QColor(0, 0, 0, 140))
+        super().paintEvent(event)
 
 
 class HotkeyBridge(QObject):
@@ -46,9 +147,11 @@ class RecruitWindow(QMainWindow):
         self.setAttribute(Qt.WA_TranslucentBackground, False)
         self.resize(760, 640)
 
-        central = QWidget()
+        central = BackgroundWidget(BACKGROUND_IMAGE)
         self.setCentralWidget(central)
         root = QVBoxLayout(central)
+        root.setContentsMargins(12, 12, 12, 12)
+        root.setSpacing(10)
 
         root.addWidget(self._build_input_panel())
         root.addWidget(self._build_results_panel())
@@ -170,8 +273,6 @@ class RecruitWindow(QMainWindow):
         self._set_overall_verdict(overall, fits)
 
     def _qcolor(self, hex_color):
-        from PyQt5.QtGui import QColor
-
         return QColor(hex_color)
 
     def _set_overall_verdict(self, overall, fits):
@@ -213,6 +314,10 @@ def register_hotkey(bridge: HotkeyBridge):
 
 def main():
     app = QApplication(sys.argv)
+    app.setStyle("Fusion")
+    app.setPalette(build_dark_palette())
+    app.setStyleSheet(DARK_STYLESHEET)
+
     window = RecruitWindow()
 
     bridge = HotkeyBridge()
