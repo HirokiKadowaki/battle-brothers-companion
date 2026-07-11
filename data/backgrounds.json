@@ -1,0 +1,2927 @@
+{
+    "Adventurous Noble":  {
+                              "hp":  {
+                                         "min":  50,
+                                         "max":  60
+                                     },
+                              "fatigue":  {
+                                              "min":  90,
+                                              "max":  105
+                                          },
+                              "resolve":  {
+                                              "min":  45,
+                                              "max":  60
+                                          },
+                              "initiative":  {
+                                                 "min":  100,
+                                                 "max":  110
+                                             },
+                              "melee_skill":  {
+                                                  "min":  57,
+                                                  "max":  67
+                                              },
+                              "ranged_skill":  {
+                                                   "min":  32,
+                                                   "max":  42
+                                               },
+                              "melee_defense":  {
+                                                    "min":  5,
+                                                    "max":  13
+                                                },
+                              "ranged_defense":  {
+                                                     "min":  -10,
+                                                     "max":  0
+                                                 },
+                              "starting_level":  {
+                                                     "min":  1,
+                                                     "max":  3
+                                                 },
+                              "base_wage":  25
+                          },
+    "Anatomist":  {
+                      "hp":  {
+                                 "min":  46,
+                                 "max":  56
+                             },
+                      "fatigue":  {
+                                      "min":  90,
+                                      "max":  95
+                                  },
+                      "resolve":  {
+                                      "min":  40,
+                                      "max":  50
+                                  },
+                      "initiative":  {
+                                         "min":  100,
+                                         "max":  110
+                                     },
+                      "melee_skill":  {
+                                          "min":  54,
+                                          "max":  64
+                                      },
+                      "ranged_skill":  {
+                                           "min":  39,
+                                           "max":  49
+                                       },
+                      "melee_defense":  {
+                                            "min":  1,
+                                            "max":  5
+                                        },
+                      "ranged_defense":  {
+                                             "min":  1,
+                                             "max":  5
+                                         },
+                      "starting_level":  {
+                                             "min":  1,
+                                             "max":  1
+                                         },
+                      "base_wage":  12
+                  },
+    "Apprentice":  {
+                       "hp":  {
+                                  "min":  50,
+                                  "max":  60
+                              },
+                       "fatigue":  {
+                                       "min":  90,
+                                       "max":  100
+                                   },
+                       "resolve":  {
+                                       "min":  30,
+                                       "max":  40
+                                   },
+                       "initiative":  {
+                                          "min":  100,
+                                          "max":  110
+                                      },
+                       "melee_skill":  {
+                                           "min":  47,
+                                           "max":  57
+                                       },
+                       "ranged_skill":  {
+                                            "min":  32,
+                                            "max":  42
+                                        },
+                       "melee_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                       "ranged_defense":  {
+                                              "min":  0,
+                                              "max":  5
+                                          },
+                       "starting_level":  {
+                                              "min":  1,
+                                              "max":  1
+                                          },
+                       "base_wage":  8
+                   },
+    "Assassin":  {
+                     "hp":  {
+                                "min":  45,
+                                "max":  55
+                            },
+                     "fatigue":  {
+                                     "min":  85,
+                                     "max":  95
+                                 },
+                     "resolve":  {
+                                     "min":  40,
+                                     "max":  50
+                                 },
+                     "initiative":  {
+                                        "min":  120,
+                                        "max":  125
+                                    },
+                     "melee_skill":  {
+                                         "min":  59,
+                                         "max":  67
+                                     },
+                     "ranged_skill":  {
+                                          "min":  32,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  5,
+                                           "max":  13
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  4,
+                                            "max":  4
+                                        },
+                     "base_wage":  25
+                 },
+    "Southern Assassin":  {
+                              "hp":  {
+                                         "min":  45,
+                                         "max":  55
+                                     },
+                              "fatigue":  {
+                                              "min":  85,
+                                              "max":  95
+                                          },
+                              "resolve":  {
+                                              "min":  40,
+                                              "max":  50
+                                          },
+                              "initiative":  {
+                                                 "min":  120,
+                                                 "max":  125
+                                             },
+                              "melee_skill":  {
+                                                  "min":  57,
+                                                  "max":  67
+                                              },
+                              "ranged_skill":  {
+                                                   "min":  32,
+                                                   "max":  42
+                                               },
+                              "melee_defense":  {
+                                                    "min":  5,
+                                                    "max":  13
+                                                },
+                              "ranged_defense":  {
+                                                     "min":  0,
+                                                     "max":  5
+                                                 },
+                              "starting_level":  {
+                                                     "min":  1,
+                                                     "max":  4
+                                                 },
+                              "base_wage":  25
+                          },
+    "Barbarian":  {
+                      "hp":  {
+                                 "min":  60,
+                                 "max":  65
+                             },
+                      "fatigue":  {
+                                      "min":  100,
+                                      "max":  105
+                                  },
+                      "resolve":  {
+                                      "min":  40,
+                                      "max":  45
+                                  },
+                      "initiative":  {
+                                         "min":  105,
+                                         "max":  120
+                                     },
+                      "melee_skill":  {
+                                          "min":  57,
+                                          "max":  62
+                                      },
+                      "ranged_skill":  {
+                                           "min":  32,
+                                           "max":  42
+                                       },
+                      "melee_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                      "ranged_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                      "starting_level":  {
+                                             "min":  2,
+                                             "max":  4
+                                         },
+                      "base_wage":  20
+                  },
+    "Bastard":  {
+                    "hp":  {
+                               "min":  50,
+                               "max":  60
+                           },
+                    "fatigue":  {
+                                    "min":  90,
+                                    "max":  100
+                                },
+                    "resolve":  {
+                                    "min":  25,
+                                    "max":  35
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  52,
+                                        "max":  67
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  -5,
+                                          "max":  10
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  3
+                                       },
+                    "base_wage":  14
+                },
+    "Beast Slayer":  {
+                         "hp":  {
+                                    "min":  50,
+                                    "max":  63
+                                },
+                         "fatigue":  {
+                                         "min":  95,
+                                         "max":  107
+                                     },
+                         "resolve":  {
+                                         "min":  43,
+                                         "max":  50
+                                     },
+                         "initiative":  {
+                                            "min":  107,
+                                            "max":  115
+                                        },
+                         "melee_skill":  {
+                                             "min":  52,
+                                             "max":  62
+                                         },
+                         "ranged_skill":  {
+                                              "min":  43,
+                                              "max":  49
+                                          },
+                         "melee_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                         "ranged_defense":  {
+                                                "min":  0,
+                                                "max":  5
+                                            },
+                         "starting_level":  {
+                                                "min":  2,
+                                                "max":  3
+                                            },
+                         "base_wage":  15
+                     },
+    "Beggar":  {
+                   "hp":  {
+                              "min":  40,
+                              "max":  50
+                          },
+                   "fatigue":  {
+                                   "min":  80,
+                                   "max":  90
+                               },
+                   "resolve":  {
+                                   "min":  20,
+                                   "max":  35
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  110
+                                  },
+                   "melee_skill":  {
+                                       "min":  47,
+                                       "max":  57
+                                   },
+                   "ranged_skill":  {
+                                        "min":  32,
+                                        "max":  42
+                                    },
+                   "melee_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                   "ranged_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  1
+                                      },
+                   "base_wage":  3
+               },
+    "Belly Dancer":  {
+                         "hp":  {
+                                    "min":  45,
+                                    "max":  55
+                                },
+                         "fatigue":  {
+                                         "min":  85,
+                                         "max":  95
+                                     },
+                         "resolve":  {
+                                         "min":  25,
+                                         "max":  35
+                                     },
+                         "initiative":  {
+                                            "min":  110,
+                                            "max":  120
+                                        },
+                         "melee_skill":  {
+                                             "min":  57,
+                                             "max":  67
+                                         },
+                         "ranged_skill":  {
+                                              "min":  37,
+                                              "max":  47
+                                          },
+                         "melee_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                         "ranged_defense":  {
+                                                "min":  0,
+                                                "max":  5
+                                            },
+                         "starting_level":  {
+                                                "min":  1,
+                                                "max":  1
+                                            },
+                         "base_wage":  20
+                     },
+    "Bowyer":  {
+                   "hp":  {
+                              "min":  50,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  85,
+                                   "max":  100
+                               },
+                   "resolve":  {
+                                   "min":  25,
+                                   "max":  40
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  110
+                                  },
+                   "melee_skill":  {
+                                       "min":  47,
+                                       "max":  57
+                                   },
+                   "ranged_skill":  {
+                                        "min":  42,
+                                        "max":  52
+                                    },
+                   "melee_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                   "ranged_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  1
+                                      },
+                   "base_wage":  8
+               },
+    "Brawler":  {
+                    "hp":  {
+                               "min":  55,
+                               "max":  70
+                           },
+                    "fatigue":  {
+                                    "min":  100,
+                                    "max":  105
+                                },
+                    "resolve":  {
+                                    "min":  37,
+                                    "max":  45
+                                },
+                    "initiative":  {
+                                       "min":  105,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  52,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  13
+                },
+    "Butcher":  {
+                    "hp":  {
+                               "min":  50,
+                               "max":  64
+                           },
+                    "fatigue":  {
+                                    "min":  90,
+                                    "max":  104
+                                },
+                    "resolve":  {
+                                    "min":  37,
+                                    "max":  45
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  50,
+                                        "max":  59
+                                    },
+                    "ranged_skill":  {
+                                         "min":  29,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  7
+                },
+    "Caravan Hand":  {
+                         "hp":  {
+                                    "min":  53,
+                                    "max":  65
+                                },
+                         "fatigue":  {
+                                         "min":  95,
+                                         "max":  107
+                                     },
+                         "resolve":  {
+                                         "min":  33,
+                                         "max":  43
+                                     },
+                         "initiative":  {
+                                            "min":  100,
+                                            "max":  110
+                                        },
+                         "melee_skill":  {
+                                             "min":  51,
+                                             "max":  57
+                                         },
+                         "ranged_skill":  {
+                                              "min":  32,
+                                              "max":  42
+                                          },
+                         "melee_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                         "ranged_defense":  {
+                                                "min":  0,
+                                                "max":  5
+                                            },
+                         "starting_level":  {
+                                                "min":  1,
+                                                "max":  1
+                                            },
+                         "base_wage":  8
+                     },
+    "Companion 1H":  {
+                         "hp":  {
+                                    "min":  50,
+                                    "max":  60
+                                },
+                         "fatigue":  {
+                                         "min":  95,
+                                         "max":  105
+                                     },
+                         "resolve":  {
+                                         "min":  40,
+                                         "max":  45
+                                     },
+                         "initiative":  {
+                                            "min":  100,
+                                            "max":  110
+                                        },
+                         "melee_skill":  {
+                                             "min":  57,
+                                             "max":  62
+                                         },
+                         "ranged_skill":  {
+                                              "min":  37,
+                                              "max":  47
+                                          },
+                         "melee_defense":  {
+                                               "min":  5,
+                                               "max":  10
+                                           },
+                         "ranged_defense":  {
+                                                "min":  5,
+                                                "max":  10
+                                            },
+                         "starting_level":  {
+                                                "min":  1,
+                                                "max":  1
+                                            },
+                         "base_wage":  14
+                     },
+    "Companion 2H":  {
+                         "hp":  {
+                                    "min":  60,
+                                    "max":  65
+                                },
+                         "fatigue":  {
+                                         "min":  95,
+                                         "max":  105
+                                     },
+                         "resolve":  {
+                                         "min":  40,
+                                         "max":  45
+                                     },
+                         "initiative":  {
+                                            "min":  95,
+                                            "max":  110
+                                        },
+                         "melee_skill":  {
+                                             "min":  57,
+                                             "max":  62
+                                         },
+                         "ranged_skill":  {
+                                              "min":  32,
+                                              "max":  42
+                                          },
+                         "melee_defense":  {
+                                               "min":  2,
+                                               "max":  5
+                                           },
+                         "ranged_defense":  {
+                                                "min":  2,
+                                                "max":  5
+                                            },
+                         "starting_level":  {
+                                                "min":  1,
+                                                "max":  1
+                                            },
+                         "base_wage":  14
+                     },
+    "Companion Ranged":  {
+                             "hp":  {
+                                        "min":  50,
+                                        "max":  60
+                                    },
+                             "fatigue":  {
+                                             "min":  90,
+                                             "max":  100
+                                         },
+                             "resolve":  {
+                                             "min":  35,
+                                             "max":  45
+                                         },
+                             "initiative":  {
+                                                "min":  105,
+                                                "max":  115
+                                            },
+                             "melee_skill":  {
+                                                 "min":  52,
+                                                 "max":  57
+                                             },
+                             "ranged_skill":  {
+                                                  "min":  48,
+                                                  "max":  52
+                                              },
+                             "melee_defense":  {
+                                                   "min":  0,
+                                                   "max":  5
+                                               },
+                             "ranged_defense":  {
+                                                    "min":  0,
+                                                    "max":  5
+                                                },
+                             "starting_level":  {
+                                                    "min":  1,
+                                                    "max":  1
+                                                },
+                             "base_wage":  14
+                         },
+    "Converted Crusader":  {
+                               "hp":  {
+                                          "min":  50,
+                                          "max":  60
+                                      },
+                               "fatigue":  {
+                                               "min":  90,
+                                               "max":  100
+                                           },
+                               "resolve":  {
+                                               "min":  35,
+                                               "max":  45
+                                           },
+                               "initiative":  {
+                                                  "min":  100,
+                                                  "max":  110
+                                              },
+                               "melee_skill":  {
+                                                   "min":  60,
+                                                   "max":  67
+                                               },
+                               "ranged_skill":  {
+                                                    "min":  44,
+                                                    "max":  52
+                                                },
+                               "melee_defense":  {
+                                                     "min":  5,
+                                                     "max":  13
+                                                 },
+                               "ranged_defense":  {
+                                                      "min":  5,
+                                                      "max":  13
+                                                  },
+                               "starting_level":  {
+                                                      "min":  2,
+                                                      "max":  4
+                                                  },
+                               "base_wage":  30
+                           },
+    "Cripple":  {
+                    "hp":  {
+                               "min":  30,
+                               "max":  50
+                           },
+                    "fatigue":  {
+                                    "min":  80,
+                                    "max":  100
+                                },
+                    "resolve":  {
+                                    "min":  30,
+                                    "max":  40
+                                },
+                    "initiative":  {
+                                       "min":  75,
+                                       "max":  100
+                                   },
+                    "melee_skill":  {
+                                        "min":  42,
+                                        "max":  52
+                                    },
+                    "ranged_skill":  {
+                                         "min":  27,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  3
+                },
+    "Crusader":  {
+                     "hp":  {
+                                "min":  60,
+                                "max":  70
+                            },
+                     "fatigue":  {
+                                     "min":  100,
+                                     "max":  110
+                                 },
+                     "resolve":  {
+                                     "min":  45,
+                                     "max":  60
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  110
+                                    },
+                     "melee_skill":  {
+                                         "min":  57,
+                                         "max":  67
+                                     },
+                     "ranged_skill":  {
+                                          "min":  22,
+                                          "max":  37
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  -5,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  9,
+                                            "max":  9
+                                        },
+                     "base_wage":  25
+                 },
+    "Cultist":  {
+                    "hp":  {
+                               "min":  45,
+                               "max":  65
+                           },
+                    "fatigue":  {
+                                    "min":  93,
+                                    "max":  103
+                                },
+                    "resolve":  {
+                                    "min":  45,
+                                    "max":  50
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  47,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  6
+                },
+    "Daytaler":  {
+                     "hp":  {
+                                "min":  50,
+                                "max":  60
+                            },
+                     "fatigue":  {
+                                     "min":  90,
+                                     "max":  103
+                                 },
+                     "resolve":  {
+                                     "min":  30,
+                                     "max":  40
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  110
+                                    },
+                     "melee_skill":  {
+                                         "min":  47,
+                                         "max":  57
+                                     },
+                     "ranged_skill":  {
+                                          "min":  32,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  1
+                                        },
+                     "base_wage":  6
+                 },
+    "Deserter":  {
+                     "hp":  {
+                                "min":  50,
+                                "max":  60
+                            },
+                     "fatigue":  {
+                                     "min":  90,
+                                     "max":  100
+                                 },
+                     "resolve":  {
+                                     "min":  15,
+                                     "max":  30
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  110
+                                    },
+                     "melee_skill":  {
+                                         "min":  52,
+                                         "max":  62
+                                     },
+                     "ranged_skill":  {
+                                          "min":  39,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  3,
+                                           "max":  10
+                                       },
+                     "ranged_defense":  {
+                                            "min":  3,
+                                            "max":  10
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  2
+                                        },
+                     "base_wage":  11
+                 },
+    "Disowned Noble":  {
+                           "hp":  {
+                                      "min":  50,
+                                      "max":  60
+                                  },
+                           "fatigue":  {
+                                           "min":  80,
+                                           "max":  95
+                                       },
+                           "resolve":  {
+                                           "min":  25,
+                                           "max":  38
+                                       },
+                           "initiative":  {
+                                              "min":  100,
+                                              "max":  110
+                                          },
+                           "melee_skill":  {
+                                               "min":  55,
+                                               "max":  67
+                                           },
+                           "ranged_skill":  {
+                                                "min":  35,
+                                                "max":  48
+                                            },
+                           "melee_defense":  {
+                                                 "min":  0,
+                                                 "max":  8
+                                             },
+                           "ranged_defense":  {
+                                                  "min":  0,
+                                                  "max":  5
+                                              },
+                           "starting_level":  {
+                                                  "min":  1,
+                                                  "max":  3
+                                              },
+                           "base_wage":  18
+                       },
+    "Regent in Absentia":  {
+                               "hp":  {
+                                          "min":  50,
+                                          "max":  60
+                                      },
+                               "fatigue":  {
+                                               "min":  80,
+                                               "max":  95
+                                           },
+                               "resolve":  {
+                                               "min":  35,
+                                               "max":  53
+                                           },
+                               "initiative":  {
+                                                  "min":  106,
+                                                  "max":  120
+                                              },
+                               "melee_skill":  {
+                                                   "min":  55,
+                                                   "max":  67
+                                               },
+                               "ranged_skill":  {
+                                                    "min":  35,
+                                                    "max":  48
+                                                },
+                               "melee_defense":  {
+                                                     "min":  2,
+                                                     "max":  12
+                                                 },
+                               "ranged_defense":  {
+                                                      "min":  3,
+                                                      "max":  10
+                                                  },
+                               "starting_level":  {
+                                                      "min":  6,
+                                                      "max":  6
+                                                  },
+                               "base_wage":  18
+                           },
+    "Eunuch":  {
+                   "hp":  {
+                              "min":  50,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  90,
+                                   "max":  100
+                               },
+                   "resolve":  {
+                                   "min":  25,
+                                   "max":  35
+                               },
+                   "initiative":  {
+                                      "min":  95,
+                                      "max":  105
+                                  },
+                   "melee_skill":  {
+                                       "min":  47,
+                                       "max":  57
+                                   },
+                   "ranged_skill":  {
+                                        "min":  32,
+                                        "max":  42
+                                    },
+                   "melee_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                   "ranged_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  1
+                                      },
+                   "base_wage":  6
+               },
+    "Executioner":  {
+                        "hp":  {
+                                   "min":  60,
+                                   "max":  67
+                               },
+                        "fatigue":  {
+                                        "min":  99,
+                                        "max":  114
+                                    },
+                        "resolve":  {
+                                        "min":  42,
+                                        "max":  50
+                                    },
+                        "initiative":  {
+                                           "min":  95,
+                                           "max":  105
+                                       },
+                        "melee_skill":  {
+                                            "min":  53,
+                                            "max":  65
+                                        },
+                        "ranged_skill":  {
+                                             "min":  27,
+                                             "max":  42
+                                         },
+                        "melee_defense":  {
+                                              "min":  -5,
+                                              "max":  5
+                                          },
+                        "ranged_defense":  {
+                                               "min":  -5,
+                                               "max":  0
+                                           },
+                        "starting_level":  {
+                                               "min":  1,
+                                               "max":  3
+                                           },
+                        "base_wage":  12
+                    },
+    "Farmhand":  {
+                     "hp":  {
+                                "min":  62,
+                                "max":  70
+                            },
+                     "fatigue":  {
+                                     "min":  100,
+                                     "max":  120
+                                 },
+                     "resolve":  {
+                                     "min":  28,
+                                     "max":  37
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  110
+                                    },
+                     "melee_skill":  {
+                                         "min":  47,
+                                         "max":  57
+                                     },
+                     "ranged_skill":  {
+                                          "min":  32,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  1
+                                        },
+                     "base_wage":  10
+                 },
+    "Fisherman":  {
+                      "hp":  {
+                                 "min":  55,
+                                 "max":  60
+                             },
+                      "fatigue":  {
+                                      "min":  95,
+                                      "max":  105
+                                  },
+                      "resolve":  {
+                                      "min":  35,
+                                      "max":  40
+                                  },
+                      "initiative":  {
+                                         "min":  100,
+                                         "max":  115
+                                     },
+                      "melee_skill":  {
+                                          "min":  47,
+                                          "max":  57
+                                      },
+                      "ranged_skill":  {
+                                           "min":  32,
+                                           "max":  42
+                                       },
+                      "melee_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                      "ranged_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                      "starting_level":  {
+                                             "min":  1,
+                                             "max":  1
+                                         },
+                      "base_wage":  7
+                  },
+    "Flagellant":  {
+                       "hp":  {
+                                  "min":  40,
+                                  "max":  55
+                              },
+                       "fatigue":  {
+                                       "min":  95,
+                                       "max":  110
+                                   },
+                       "resolve":  {
+                                       "min":  42,
+                                       "max":  52
+                                   },
+                       "initiative":  {
+                                          "min":  100,
+                                          "max":  110
+                                      },
+                       "melee_skill":  {
+                                           "min":  47,
+                                           "max":  57
+                                       },
+                       "ranged_skill":  {
+                                            "min":  32,
+                                            "max":  42
+                                        },
+                       "melee_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                       "ranged_defense":  {
+                                              "min":  0,
+                                              "max":  5
+                                          },
+                       "starting_level":  {
+                                              "min":  1,
+                                              "max":  1
+                                          },
+                       "base_wage":  6
+                   },
+    "Gambler":  {
+                    "hp":  {
+                               "min":  48,
+                               "max":  58
+                           },
+                    "fatigue":  {
+                                    "min":  84,
+                                    "max":  95
+                                },
+                    "resolve":  {
+                                    "min":  42,
+                                    "max":  52
+                                },
+                    "initiative":  {
+                                       "min":  112,
+                                       "max":  120
+                                   },
+                    "melee_skill":  {
+                                        "min":  47,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  7
+                                      },
+                    "ranged_defense":  {
+                                           "min":  2,
+                                           "max":  13
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  6
+                },
+    "Gladiator":  {
+                      "hp":  {
+                                 "min":  50,
+                                 "max":  60
+                             },
+                      "fatigue":  {
+                                      "min":  90,
+                                      "max":  100
+                                  },
+                      "resolve":  {
+                                      "min":  35,
+                                      "max":  45
+                                  },
+                      "initiative":  {
+                                         "min":  100,
+                                         "max":  110
+                                     },
+                      "melee_skill":  {
+                                          "min":  60,
+                                          "max":  67
+                                      },
+                      "ranged_skill":  {
+                                           "min":  40,
+                                           "max":  48
+                                       },
+                      "melee_defense":  {
+                                            "min":  5,
+                                            "max":  13
+                                        },
+                      "ranged_defense":  {
+                                             "min":  5,
+                                             "max":  13
+                                         },
+                      "starting_level":  {
+                                             "min":  2,
+                                             "max":  4
+                                         },
+                      "base_wage":  35
+                  },
+    "Gravedigger":  {
+                        "hp":  {
+                                   "min":  50,
+                                   "max":  64
+                               },
+                        "fatigue":  {
+                                        "min":  95,
+                                        "max":  107
+                                    },
+                        "resolve":  {
+                                        "min":  37,
+                                        "max":  45
+                                    },
+                        "initiative":  {
+                                           "min":  95,
+                                           "max":  110
+                                       },
+                        "melee_skill":  {
+                                            "min":  47,
+                                            "max":  57
+                                        },
+                        "ranged_skill":  {
+                                             "min":  32,
+                                             "max":  42
+                                         },
+                        "melee_defense":  {
+                                              "min":  0,
+                                              "max":  5
+                                          },
+                        "ranged_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                        "starting_level":  {
+                                               "min":  1,
+                                               "max":  1
+                                           },
+                        "base_wage":  5
+                    },
+    "Graverobber":  {
+                        "hp":  {
+                                   "min":  50,
+                                   "max":  60
+                               },
+                        "fatigue":  {
+                                        "min":  95,
+                                        "max":  105
+                                    },
+                        "resolve":  {
+                                        "min":  38,
+                                        "max":  45
+                                    },
+                        "initiative":  {
+                                           "min":  100,
+                                           "max":  114
+                                       },
+                        "melee_skill":  {
+                                            "min":  50,
+                                            "max":  57
+                                        },
+                        "ranged_skill":  {
+                                             "min":  32,
+                                             "max":  42
+                                         },
+                        "melee_defense":  {
+                                              "min":  0,
+                                              "max":  6
+                                          },
+                        "ranged_defense":  {
+                                               "min":  0,
+                                               "max":  6
+                                           },
+                        "starting_level":  {
+                                               "min":  1,
+                                               "max":  1
+                                           },
+                        "base_wage":  6
+                    },
+    "Hedge Knight":  {
+                         "hp":  {
+                                    "min":  62,
+                                    "max":  73
+                                },
+                         "fatigue":  {
+                                         "min":  105,
+                                         "max":  110
+                                     },
+                         "resolve":  {
+                                         "min":  39,
+                                         "max":  44
+                                     },
+                         "initiative":  {
+                                            "min":  86,
+                                            "max":  103
+                                        },
+                         "melee_skill":  {
+                                             "min":  58,
+                                             "max":  67
+                                         },
+                         "ranged_skill":  {
+                                              "min":  32,
+                                              "max":  42
+                                          },
+                         "melee_defense":  {
+                                               "min":  6,
+                                               "max":  10
+                                           },
+                         "ranged_defense":  {
+                                                "min":  0,
+                                                "max":  5
+                                            },
+                         "starting_level":  {
+                                                "min":  2,
+                                                "max":  5
+                                            },
+                         "base_wage":  35
+                     },
+    "Historian":  {
+                      "hp":  {
+                                 "min":  48,
+                                 "max":  55
+                             },
+                      "fatigue":  {
+                                      "min":  85,
+                                      "max":  95
+                                  },
+                      "resolve":  {
+                                      "min":  30,
+                                      "max":  40
+                                  },
+                      "initiative":  {
+                                         "min":  100,
+                                         "max":  110
+                                     },
+                      "melee_skill":  {
+                                          "min":  42,
+                                          "max":  52
+                                      },
+                      "ranged_skill":  {
+                                           "min":  29,
+                                           "max":  40
+                                       },
+                      "melee_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                      "ranged_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                      "starting_level":  {
+                                             "min":  1,
+                                             "max":  1
+                                         },
+                      "base_wage":  8
+                  },
+    "Houndmaster":  {
+                        "hp":  {
+                                   "min":  55,
+                                   "max":  60
+                               },
+                        "fatigue":  {
+                                        "min":  95,
+                                        "max":  100
+                                    },
+                        "resolve":  {
+                                        "min":  35,
+                                        "max":  45
+                                    },
+                        "initiative":  {
+                                           "min":  105,
+                                           "max":  110
+                                       },
+                        "melee_skill":  {
+                                            "min":  47,
+                                            "max":  57
+                                        },
+                        "ranged_skill":  {
+                                             "min":  32,
+                                             "max":  42
+                                         },
+                        "melee_defense":  {
+                                              "min":  3,
+                                              "max":  8
+                                          },
+                        "ranged_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                        "starting_level":  {
+                                               "min":  1,
+                                               "max":  1
+                                           },
+                        "base_wage":  7
+                    },
+    "Hunter":  {
+                   "hp":  {
+                              "min":  50,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  97,
+                                   "max":  105
+                               },
+                   "resolve":  {
+                                   "min":  30,
+                                   "max":  45
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  115
+                                  },
+                   "melee_skill":  {
+                                       "min":  47,
+                                       "max":  57
+                                   },
+                   "ranged_skill":  {
+                                        "min":  52,
+                                        "max":  59
+                                    },
+                   "melee_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                   "ranged_defense":  {
+                                          "min":  0,
+                                          "max":  8
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  2
+                                      },
+                   "base_wage":  20
+               },
+    "Indebted":  {
+                     "hp":  {
+                                "min":  40,
+                                "max":  50
+                            },
+                     "fatigue":  {
+                                     "min":  90,
+                                     "max":  100
+                                 },
+                     "resolve":  {
+                                     "min":  25,
+                                     "max":  40
+                                 },
+                     "initiative":  {
+                                        "min":  95,
+                                        "max":  105
+                                    },
+                     "melee_skill":  {
+                                         "min":  47,
+                                         "max":  57
+                                     },
+                     "ranged_skill":  {
+                                          "min":  32,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  1
+                                        },
+                     "base_wage":  0
+                 },
+    "Barbarian Indebted":  {
+                               "hp":  {
+                                          "min":  50,
+                                          "max":  60
+                                      },
+                               "fatigue":  {
+                                               "min":  95,
+                                               "max":  105
+                                           },
+                               "resolve":  {
+                                               "min":  20,
+                                               "max":  35
+                                           },
+                               "initiative":  {
+                                                  "min":  95,
+                                                  "max":  105
+                                              },
+                               "melee_skill":  {
+                                                   "min":  47,
+                                                   "max":  57
+                                               },
+                               "ranged_skill":  {
+                                                    "min":  32,
+                                                    "max":  42
+                                                },
+                               "melee_defense":  {
+                                                     "min":  -2,
+                                                     "max":  4
+                                                 },
+                               "ranged_defense":  {
+                                                      "min":  -2,
+                                                      "max":  4
+                                                  },
+                               "starting_level":  {
+                                                      "min":  1,
+                                                      "max":  1
+                                                  },
+                               "base_wage":  0
+                           },
+    "Southern Indebted":  {
+                              "hp":  {
+                                         "min":  40,
+                                         "max":  50
+                                     },
+                              "fatigue":  {
+                                              "min":  95,
+                                              "max":  105
+                                          },
+                              "resolve":  {
+                                              "min":  20,
+                                              "max":  35
+                                          },
+                              "initiative":  {
+                                                 "min":  95,
+                                                 "max":  105
+                                             },
+                              "melee_skill":  {
+                                                  "min":  47,
+                                                  "max":  57
+                                              },
+                              "ranged_skill":  {
+                                                   "min":  32,
+                                                   "max":  42
+                                               },
+                              "melee_defense":  {
+                                                    "min":  0,
+                                                    "max":  5
+                                                },
+                              "ranged_defense":  {
+                                                     "min":  0,
+                                                     "max":  5
+                                                 },
+                              "starting_level":  {
+                                                     "min":  1,
+                                                     "max":  1
+                                                 },
+                              "base_wage":  0
+                          },
+    "Juggler":  {
+                    "hp":  {
+                               "min":  45,
+                               "max":  55
+                           },
+                    "fatigue":  {
+                                    "min":  90,
+                                    "max":  100
+                                },
+                    "resolve":  {
+                                    "min":  30,
+                                    "max":  40
+                                },
+                    "initiative":  {
+                                       "min":  112,
+                                       "max":  120
+                                   },
+                    "melee_skill":  {
+                                        "min":  47,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  35,
+                                         "max":  45
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  7
+                },
+    "Killer on the Run":  {
+                              "hp":  {
+                                         "min":  50,
+                                         "max":  60
+                                     },
+                              "fatigue":  {
+                                              "min":  90,
+                                              "max":  100
+                                          },
+                              "resolve":  {
+                                              "min":  25,
+                                              "max":  35
+                                          },
+                              "initiative":  {
+                                                 "min":  100,
+                                                 "max":  115
+                                             },
+                              "melee_skill":  {
+                                                  "min":  51,
+                                                  "max":  57
+                                              },
+                              "ranged_skill":  {
+                                                   "min":  34,
+                                                   "max":  45
+                                               },
+                              "melee_defense":  {
+                                                    "min":  0,
+                                                    "max":  5
+                                                },
+                              "ranged_defense":  {
+                                                     "min":  0,
+                                                     "max":  5
+                                                 },
+                              "starting_level":  {
+                                                     "min":  1,
+                                                     "max":  1
+                                                 },
+                              "base_wage":  6
+                          },
+    "King\u0027s Guard":  {
+                              "hp":  {
+                                         "min":  45,
+                                         "max":  65
+                                     },
+                              "fatigue":  {
+                                              "min":  90,
+                                              "max":  110
+                                          },
+                              "resolve":  {
+                                              "min":  45,
+                                              "max":  55
+                                          },
+                              "initiative":  {
+                                                 "min":  85,
+                                                 "max":  110
+                                             },
+                              "melee_skill":  {
+                                                  "min":  54,
+                                                  "max":  64
+                                              },
+                              "ranged_skill":  {
+                                                   "min":  27,
+                                                   "max":  42
+                                               },
+                              "melee_defense":  {
+                                                    "min":  7,
+                                                    "max":  12
+                                                },
+                              "ranged_defense":  {
+                                                     "min":  7,
+                                                     "max":  12
+                                                 },
+                              "starting_level":  {
+                                                     "min":  1,
+                                                     "max":  1
+                                                 },
+                              "base_wage":  30
+                          },
+    "Lindwurm Slayer":  {
+                            "hp":  {
+                                       "min":  56,
+                                       "max":  63
+                                   },
+                            "fatigue":  {
+                                            "min":  95,
+                                            "max":  105
+                                        },
+                            "resolve":  {
+                                            "min":  42,
+                                            "max":  50
+                                        },
+                            "initiative":  {
+                                               "min":  108,
+                                               "max":  122
+                                           },
+                            "melee_skill":  {
+                                                "min":  55,
+                                                "max":  65
+                                            },
+                            "ranged_skill":  {
+                                                 "min":  42,
+                                                 "max":  50
+                                             },
+                            "melee_defense":  {
+                                                  "min":  5,
+                                                  "max":  9
+                                              },
+                            "ranged_defense":  {
+                                                   "min":  -3,
+                                                   "max":  2
+                                               },
+                            "starting_level":  {
+                                                   "min":  1,
+                                                   "max":  1
+                                               },
+                            "base_wage":  28
+                        },
+    "Lumberjack":  {
+                       "hp":  {
+                                  "min":  60,
+                                  "max":  70
+                              },
+                       "fatigue":  {
+                                       "min":  100,
+                                       "max":  115
+                                   },
+                       "resolve":  {
+                                       "min":  30,
+                                       "max":  45
+                                   },
+                       "initiative":  {
+                                          "min":  95,
+                                          "max":  110
+                                      },
+                       "melee_skill":  {
+                                           "min":  52,
+                                           "max":  57
+                                       },
+                       "ranged_skill":  {
+                                            "min":  32,
+                                            "max":  42
+                                        },
+                       "melee_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                       "ranged_defense":  {
+                                              "min":  0,
+                                              "max":  5
+                                          },
+                       "starting_level":  {
+                                              "min":  1,
+                                              "max":  1
+                                          },
+                       "base_wage":  13
+                   },
+    "Manhunter":  {
+                      "hp":  {
+                                 "min":  52,
+                                 "max":  63
+                             },
+                      "fatigue":  {
+                                      "min":  93,
+                                      "max":  105
+                                  },
+                      "resolve":  {
+                                      "min":  37,
+                                      "max":  45
+                                  },
+                      "initiative":  {
+                                         "min":  103,
+                                         "max":  115
+                                     },
+                      "melee_skill":  {
+                                          "min":  52,
+                                          "max":  62
+                                      },
+                      "ranged_skill":  {
+                                           "min":  32,
+                                           "max":  42
+                                       },
+                      "melee_defense":  {
+                                            "min":  2,
+                                            "max":  7
+                                        },
+                      "ranged_defense":  {
+                                             "min":  -1,
+                                             "max":  4
+                                         },
+                      "starting_level":  {
+                                             "min":  1,
+                                             "max":  1
+                                         },
+                      "base_wage":  10
+                  },
+    "Mason":  {
+                  "hp":  {
+                             "min":  50,
+                             "max":  60
+                         },
+                  "fatigue":  {
+                                  "min":  95,
+                                  "max":  105
+                              },
+                  "resolve":  {
+                                  "min":  30,
+                                  "max":  40
+                              },
+                  "initiative":  {
+                                     "min":  100,
+                                     "max":  110
+                                 },
+                  "melee_skill":  {
+                                      "min":  47,
+                                      "max":  57
+                                  },
+                  "ranged_skill":  {
+                                       "min":  32,
+                                       "max":  42
+                                   },
+                  "melee_defense":  {
+                                        "min":  0,
+                                        "max":  5
+                                    },
+                  "ranged_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                  "starting_level":  {
+                                         "min":  1,
+                                         "max":  1
+                                     },
+                  "base_wage":  8
+              },
+    "Messenger":  {
+                      "hp":  {
+                                 "min":  50,
+                                 "max":  60
+                             },
+                      "fatigue":  {
+                                      "min":  105,
+                                      "max":  110
+                                  },
+                      "resolve":  {
+                                      "min":  35,
+                                      "max":  40
+                                  },
+                      "initiative":  {
+                                         "min":  100,
+                                         "max":  110
+                                     },
+                      "melee_skill":  {
+                                          "min":  47,
+                                          "max":  57
+                                      },
+                      "ranged_skill":  {
+                                           "min":  32,
+                                           "max":  42
+                                       },
+                      "melee_defense":  {
+                                            "min":  0,
+                                            "max":  7
+                                        },
+                      "ranged_defense":  {
+                                             "min":  3,
+                                             "max":  8
+                                         },
+                      "starting_level":  {
+                                             "min":  1,
+                                             "max":  1
+                                         },
+                      "base_wage":  6
+                  },
+    "Militia":  {
+                    "hp":  {
+                               "min":  50,
+                               "max":  60
+                           },
+                    "fatigue":  {
+                                    "min":  93,
+                                    "max":  105
+                                },
+                    "resolve":  {
+                                    "min":  33,
+                                    "max":  45
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  52,
+                                        "max":  62
+                                    },
+                    "ranged_skill":  {
+                                         "min":  38,
+                                         "max":  47
+                                     },
+                    "melee_defense":  {
+                                          "min":  2,
+                                          "max":  7
+                                      },
+                    "ranged_defense":  {
+                                           "min":  2,
+                                           "max":  7
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  2
+                                       },
+                    "base_wage":  10
+                },
+    "Miller":  {
+                   "hp":  {
+                              "min":  53,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  98,
+                                   "max":  105
+                               },
+                   "resolve":  {
+                                   "min":  30,
+                                   "max":  40
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  110
+                                  },
+                   "melee_skill":  {
+                                       "min":  47,
+                                       "max":  57
+                                   },
+                   "ranged_skill":  {
+                                        "min":  32,
+                                        "max":  42
+                                    },
+                   "melee_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                   "ranged_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  1
+                                      },
+                   "base_wage":  7
+               },
+    "Miner":  {
+                  "hp":  {
+                             "min":  60,
+                             "max":  70
+                         },
+                  "fatigue":  {
+                                  "min":  80,
+                                  "max":  90
+                              },
+                  "resolve":  {
+                                  "min":  35,
+                                  "max":  48
+                              },
+                  "initiative":  {
+                                     "min":  100,
+                                     "max":  110
+                                 },
+                  "melee_skill":  {
+                                      "min":  52,
+                                      "max":  57
+                                  },
+                  "ranged_skill":  {
+                                       "min":  32,
+                                       "max":  42
+                                   },
+                  "melee_defense":  {
+                                        "min":  0,
+                                        "max":  5
+                                    },
+                  "ranged_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                  "starting_level":  {
+                                         "min":  1,
+                                         "max":  1
+                                     },
+                  "base_wage":  6
+              },
+    "Minstrel":  {
+                     "hp":  {
+                                "min":  45,
+                                "max":  57
+                            },
+                     "fatigue":  {
+                                     "min":  80,
+                                     "max":  90
+                                 },
+                     "resolve":  {
+                                     "min":  35,
+                                     "max":  50
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  115
+                                    },
+                     "melee_skill":  {
+                                         "min":  47,
+                                         "max":  57
+                                     },
+                     "ranged_skill":  {
+                                          "min":  32,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  1
+                                        },
+                     "base_wage":  6
+                 },
+    "Monk":  {
+                 "hp":  {
+                            "min":  50,
+                            "max":  60
+                        },
+                 "fatigue":  {
+                                 "min":  80,
+                                 "max":  100
+                             },
+                 "resolve":  {
+                                 "min":  41,
+                                 "max":  51
+                             },
+                 "initiative":  {
+                                    "min":  100,
+                                    "max":  110
+                                },
+                 "melee_skill":  {
+                                     "min":  42,
+                                     "max":  52
+                                 },
+                 "ranged_skill":  {
+                                      "min":  32,
+                                      "max":  42
+                                  },
+                 "melee_defense":  {
+                                       "min":  0,
+                                       "max":  5
+                                   },
+                 "ranged_defense":  {
+                                        "min":  0,
+                                        "max":  5
+                                    },
+                 "starting_level":  {
+                                        "min":  1,
+                                        "max":  1
+                                    },
+                 "base_wage":  5
+             },
+    "Melee Nomad":  {
+                        "hp":  {
+                                   "min":  50,
+                                   "max":  60
+                               },
+                        "fatigue":  {
+                                        "min":  92,
+                                        "max":  100
+                                    },
+                        "resolve":  {
+                                        "min":  30,
+                                        "max":  37
+                                    },
+                        "initiative":  {
+                                           "min":  100,
+                                           "max":  110
+                                       },
+                        "melee_skill":  {
+                                            "min":  59,
+                                            "max":  67
+                                        },
+                        "ranged_skill":  {
+                                             "min":  37,
+                                             "max":  42
+                                         },
+                        "melee_defense":  {
+                                              "min":  6,
+                                              "max":  10
+                                          },
+                        "ranged_defense":  {
+                                               "min":  6,
+                                               "max":  10
+                                           },
+                        "starting_level":  {
+                                               "min":  2,
+                                               "max":  4
+                                           },
+                        "base_wage":  28
+                    },
+    "Ranged Nomad":  {
+                         "hp":  {
+                                    "min":  50,
+                                    "max":  60
+                                },
+                         "fatigue":  {
+                                         "min":  92,
+                                         "max":  100
+                                     },
+                         "resolve":  {
+                                         "min":  30,
+                                         "max":  37
+                                     },
+                         "initiative":  {
+                                            "min":  100,
+                                            "max":  110
+                                        },
+                         "melee_skill":  {
+                                             "min":  52,
+                                             "max":  60
+                                         },
+                         "ranged_skill":  {
+                                              "min":  47,
+                                              "max":  56
+                                          },
+                         "melee_defense":  {
+                                               "min":  5,
+                                               "max":  8
+                                           },
+                         "ranged_defense":  {
+                                                "min":  6,
+                                                "max":  10
+                                            },
+                         "starting_level":  {
+                                                "min":  2,
+                                                "max":  4
+                                            },
+                         "base_wage":  28
+                     },
+    "Oathtaker":  {
+                      "hp":  {
+                                 "min":  60,
+                                 "max":  66
+                             },
+                      "fatigue":  {
+                                      "min":  90,
+                                      "max":  96
+                                  },
+                      "resolve":  {
+                                      "min":  43,
+                                      "max":  56
+                                  },
+                      "initiative":  {
+                                         "min":  113,
+                                         "max":  122
+                                     },
+                      "melee_skill":  {
+                                          "min":  60,
+                                          "max":  67
+                                      },
+                      "ranged_skill":  {
+                                           "min":  30,
+                                           "max":  39
+                                       },
+                      "melee_defense":  {
+                                            "min":  4,
+                                            "max":  8
+                                        },
+                      "ranged_defense":  {
+                                             "min":  -10,
+                                             "max":  0
+                                         },
+                      "starting_level":  {
+                                             "min":  1,
+                                             "max":  3
+                                         },
+                      "base_wage":  22
+                  },
+    "Orc Slayer":  {
+                       "hp":  {
+                                  "min":  60,
+                                  "max":  70
+                              },
+                       "fatigue":  {
+                                       "min":  100,
+                                       "max":  110
+                                   },
+                       "resolve":  {
+                                       "min":  45,
+                                       "max":  60
+                                   },
+                       "initiative":  {
+                                          "min":  100,
+                                          "max":  110
+                                      },
+                       "melee_skill":  {
+                                           "min":  57,
+                                           "max":  67
+                                       },
+                       "ranged_skill":  {
+                                            "min":  22,
+                                            "max":  37
+                                        },
+                       "melee_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                       "ranged_defense":  {
+                                              "min":  -5,
+                                              "max":  5
+                                          },
+                       "starting_level":  {
+                                              "min":  9,
+                                              "max":  9
+                                          },
+                       "base_wage":  25
+                   },
+    "Peddler":  {
+                    "hp":  {
+                               "min":  50,
+                               "max":  60
+                           },
+                    "fatigue":  {
+                                    "min":  90,
+                                    "max":  100
+                                },
+                    "resolve":  {
+                                    "min":  30,
+                                    "max":  40
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  117
+                                   },
+                    "melee_skill":  {
+                                        "min":  37,
+                                        "max":  48
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  2,
+                                          "max":  12
+                                      },
+                    "ranged_defense":  {
+                                           "min":  2,
+                                           "max":  12
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  6
+                },
+    "Pimp":  {
+                 "hp":  {
+                            "min":  50,
+                            "max":  60
+                        },
+                 "fatigue":  {
+                                 "min":  90,
+                                 "max":  100
+                             },
+                 "resolve":  {
+                                 "min":  35,
+                                 "max":  45
+                             },
+                 "initiative":  {
+                                    "min":  100,
+                                    "max":  117
+                                },
+                 "melee_skill":  {
+                                     "min":  42,
+                                     "max":  52
+                                 },
+                 "ranged_skill":  {
+                                      "min":  32,
+                                      "max":  42
+                                  },
+                 "melee_defense":  {
+                                       "min":  2,
+                                       "max":  12
+                                   },
+                 "ranged_defense":  {
+                                        "min":  2,
+                                        "max":  12
+                                    },
+                 "starting_level":  {
+                                        "min":  1,
+                                        "max":  1
+                                    },
+                 "base_wage":  6
+             },
+    "Poacher":  {
+                    "hp":  {
+                               "min":  50,
+                               "max":  60
+                           },
+                    "fatigue":  {
+                                    "min":  93,
+                                    "max":  100
+                                },
+                    "resolve":  {
+                                    "min":  25,
+                                    "max":  45
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  114
+                                   },
+                    "melee_skill":  {
+                                        "min":  49,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  47,
+                                         "max":  49
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  8
+                },
+    "Raider":  {
+                   "hp":  {
+                              "min":  50,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  92,
+                                   "max":  100
+                               },
+                   "resolve":  {
+                                   "min":  30,
+                                   "max":  37
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  110
+                                  },
+                   "melee_skill":  {
+                                       "min":  59,
+                                       "max":  67
+                                   },
+                   "ranged_skill":  {
+                                        "min":  37,
+                                        "max":  42
+                                    },
+                   "melee_defense":  {
+                                         "min":  6,
+                                         "max":  10
+                                     },
+                   "ranged_defense":  {
+                                          "min":  6,
+                                          "max":  10
+                                      },
+                   "starting_level":  {
+                                          "min":  2,
+                                          "max":  4
+                                      },
+                   "base_wage":  28
+               },
+    "Ratcatcher":  {
+                       "hp":  {
+                                  "min":  45,
+                                  "max":  55
+                              },
+                       "fatigue":  {
+                                       "min":  90,
+                                       "max":  100
+                                   },
+                       "resolve":  {
+                                       "min":  30,
+                                       "max":  40
+                                   },
+                       "initiative":  {
+                                          "min":  118,
+                                          "max":  125
+                                      },
+                       "melee_skill":  {
+                                           "min":  47,
+                                           "max":  57
+                                       },
+                       "ranged_skill":  {
+                                            "min":  32,
+                                            "max":  42
+                                        },
+                       "melee_defense":  {
+                                             "min":  0,
+                                             "max":  5
+                                         },
+                       "ranged_defense":  {
+                                              "min":  0,
+                                              "max":  5
+                                          },
+                       "starting_level":  {
+                                              "min":  1,
+                                              "max":  1
+                                          },
+                       "base_wage":  4
+                   },
+    "Refugee":  {
+                    "hp":  {
+                               "min":  42,
+                               "max":  55
+                           },
+                    "fatigue":  {
+                                    "min":  97,
+                                    "max":  105
+                                },
+                    "resolve":  {
+                                    "min":  25,
+                                    "max":  35
+                                },
+                    "initiative":  {
+                                       "min":  100,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  47,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  1,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  4
+                },
+    "Retired Soldier":  {
+                            "hp":  {
+                                       "min":  40,
+                                       "max":  45
+                                   },
+                            "fatigue":  {
+                                            "min":  80,
+                                            "max":  90
+                                        },
+                            "resolve":  {
+                                            "min":  43,
+                                            "max":  50
+                                        },
+                            "initiative":  {
+                                               "min":  95,
+                                               "max":  100
+                                           },
+                            "melee_skill":  {
+                                                "min":  60,
+                                                "max":  67
+                                            },
+                            "ranged_skill":  {
+                                                 "min":  37,
+                                                 "max":  42
+                                             },
+                            "melee_defense":  {
+                                                  "min":  5,
+                                                  "max":  13
+                                              },
+                            "ranged_defense":  {
+                                                   "min":  5,
+                                                   "max":  13
+                                               },
+                            "starting_level":  {
+                                                   "min":  2,
+                                                   "max":  3
+                                               },
+                            "base_wage":  15
+                        },
+    "Sellsword":  {
+                      "hp":  {
+                                 "min":  50,
+                                 "max":  60
+                             },
+                      "fatigue":  {
+                                      "min":  90,
+                                      "max":  100
+                                  },
+                      "resolve":  {
+                                      "min":  35,
+                                      "max":  45
+                                  },
+                      "initiative":  {
+                                         "min":  100,
+                                         "max":  110
+                                     },
+                      "melee_skill":  {
+                                          "min":  60,
+                                          "max":  67
+                                      },
+                      "ranged_skill":  {
+                                           "min":  44,
+                                           "max":  52
+                                       },
+                      "melee_defense":  {
+                                            "min":  5,
+                                            "max":  13
+                                        },
+                      "ranged_defense":  {
+                                             "min":  5,
+                                             "max":  13
+                                         },
+                      "starting_level":  {
+                                             "min":  2,
+                                             "max":  4
+                                         },
+                      "base_wage":  35
+                  },
+    "Servant":  {
+                    "hp":  {
+                               "min":  45,
+                               "max":  55
+                           },
+                    "fatigue":  {
+                                    "min":  85,
+                                    "max":  95
+                                },
+                    "resolve":  {
+                                    "min":  25,
+                                    "max":  35
+                                },
+                    "initiative":  {
+                                       "min":  105,
+                                       "max":  110
+                                   },
+                    "melee_skill":  {
+                                        "min":  47,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  32,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  2,
+                                           "max":  5
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  1
+                                       },
+                    "base_wage":  4
+                },
+    "Shepherd":  {
+                     "hp":  {
+                                "min":  50,
+                                "max":  60
+                            },
+                     "fatigue":  {
+                                     "min":  90,
+                                     "max":  105
+                                 },
+                     "resolve":  {
+                                     "min":  35,
+                                     "max":  40
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  110
+                                    },
+                     "melee_skill":  {
+                                         "min":  47,
+                                         "max":  57
+                                     },
+                     "ranged_skill":  {
+                                          "min":  37,
+                                          "max":  49
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  1
+                                        },
+                     "base_wage":  6
+                 },
+    "Squire":  {
+                   "hp":  {
+                              "min":  50,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  97,
+                                   "max":  105
+                               },
+                   "resolve":  {
+                                   "min":  42,
+                                   "max":  52
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  110
+                                  },
+                   "melee_skill":  {
+                                       "min":  54,
+                                       "max":  62
+                                   },
+                   "ranged_skill":  {
+                                        "min":  39,
+                                        "max":  50
+                                    },
+                   "melee_defense":  {
+                                         "min":  1,
+                                         "max":  8
+                                     },
+                   "ranged_defense":  {
+                                          "min":  1,
+                                          "max":  8
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  1
+                                      },
+                   "base_wage":  20
+               },
+    "Swordmaster":  {
+                        "hp":  {
+                                   "min":  38,
+                                   "max":  48
+                               },
+                        "fatigue":  {
+                                        "min":  75,
+                                        "max":  90
+                                    },
+                        "resolve":  {
+                                        "min":  42,
+                                        "max":  50
+                                    },
+                        "initiative":  {
+                                           "min":  90,
+                                           "max":  100
+                                       },
+                        "melee_skill":  {
+                                            "min":  72,
+                                            "max":  77
+                                        },
+                        "ranged_skill":  {
+                                             "min":  27,
+                                             "max":  37
+                                         },
+                        "melee_defense":  {
+                                              "min":  10,
+                                              "max":  20
+                                          },
+                        "ranged_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                        "starting_level":  {
+                                               "min":  3,
+                                               "max":  5
+                                           },
+                        "base_wage":  35
+                    },
+    "Tailor":  {
+                   "hp":  {
+                              "min":  47,
+                              "max":  60
+                          },
+                   "fatigue":  {
+                                   "min":  85,
+                                   "max":  95
+                               },
+                   "resolve":  {
+                                   "min":  30,
+                                   "max":  40
+                               },
+                   "initiative":  {
+                                      "min":  100,
+                                      "max":  115
+                                  },
+                   "melee_skill":  {
+                                       "min":  47,
+                                       "max":  57
+                                   },
+                   "ranged_skill":  {
+                                        "min":  32,
+                                        "max":  42
+                                    },
+                   "melee_defense":  {
+                                         "min":  0,
+                                         "max":  5
+                                     },
+                   "ranged_defense":  {
+                                          "min":  0,
+                                          "max":  5
+                                      },
+                   "starting_level":  {
+                                          "min":  1,
+                                          "max":  1
+                                      },
+                   "base_wage":  5
+               },
+    "Thief":  {
+                  "hp":  {
+                             "min":  50,
+                             "max":  60
+                         },
+                  "fatigue":  {
+                                  "min":  90,
+                                  "max":  100
+                              },
+                  "resolve":  {
+                                  "min":  35,
+                                  "max":  40
+                              },
+                  "initiative":  {
+                                     "min":  112,
+                                     "max":  120
+                                 },
+                  "melee_skill":  {
+                                      "min":  47,
+                                      "max":  57
+                                  },
+                  "ranged_skill":  {
+                                       "min":  32,
+                                       "max":  42
+                                   },
+                  "melee_defense":  {
+                                        "min":  5,
+                                        "max":  13
+                                    },
+                  "ranged_defense":  {
+                                         "min":  5,
+                                         "max":  13
+                                     },
+                  "starting_level":  {
+                                         "min":  1,
+                                         "max":  1
+                                     },
+                  "base_wage":  10
+              },
+    "Vagabond":  {
+                     "hp":  {
+                                "min":  47,
+                                "max":  60
+                            },
+                     "fatigue":  {
+                                     "min":  100,
+                                     "max":  115
+                                 },
+                     "resolve":  {
+                                     "min":  25,
+                                     "max":  33
+                                 },
+                     "initiative":  {
+                                        "min":  100,
+                                        "max":  110
+                                    },
+                     "melee_skill":  {
+                                         "min":  47,
+                                         "max":  57
+                                     },
+                     "ranged_skill":  {
+                                          "min":  32,
+                                          "max":  42
+                                      },
+                     "melee_defense":  {
+                                           "min":  0,
+                                           "max":  5
+                                       },
+                     "ranged_defense":  {
+                                            "min":  0,
+                                            "max":  5
+                                        },
+                     "starting_level":  {
+                                            "min":  1,
+                                            "max":  1
+                                        },
+                     "base_wage":  6
+                 },
+    "Wildman":  {
+                    "hp":  {
+                               "min":  62,
+                               "max":  70
+                           },
+                    "fatigue":  {
+                                    "min":  108,
+                                    "max":  123
+                                },
+                    "resolve":  {
+                                    "min":  42,
+                                    "max":  50
+                                },
+                    "initiative":  {
+                                       "min":  95,
+                                       "max":  105
+                                   },
+                    "melee_skill":  {
+                                        "min":  53,
+                                        "max":  57
+                                    },
+                    "ranged_skill":  {
+                                         "min":  27,
+                                         "max":  42
+                                     },
+                    "melee_defense":  {
+                                          "min":  -5,
+                                          "max":  5
+                                      },
+                    "ranged_defense":  {
+                                           "min":  -5,
+                                           "max":  0
+                                       },
+                    "starting_level":  {
+                                           "min":  1,
+                                           "max":  2
+                                       },
+                    "base_wage":  12
+                },
+    "Witchhunter":  {
+                        "hp":  {
+                                   "min":  50,
+                                   "max":  60
+                               },
+                        "fatigue":  {
+                                        "min":  90,
+                                        "max":  100
+                                    },
+                        "resolve":  {
+                                        "min":  42,
+                                        "max":  50
+                                    },
+                        "initiative":  {
+                                           "min":  100,
+                                           "max":  110
+                                       },
+                        "melee_skill":  {
+                                            "min":  47,
+                                            "max":  57
+                                        },
+                        "ranged_skill":  {
+                                             "min":  47,
+                                             "max":  50
+                                         },
+                        "melee_defense":  {
+                                              "min":  0,
+                                              "max":  5
+                                          },
+                        "ranged_defense":  {
+                                               "min":  0,
+                                               "max":  5
+                                           },
+                        "starting_level":  {
+                                               "min":  1,
+                                               "max":  3
+                                           },
+                        "base_wage":  13
+                    }
+}

@@ -1,0 +1,125 @@
+{
+  "_source": "Paraphrased from a community guide by WANG Chenhua: https://steamcommunity.com/sharedfiles/filedetails/?id=1790093811 (thresholds only, not copied verbatim). All values are level-11 targets, compared directly against calculator projections.",
+  "_stat_key_legend": {
+    "matk": "melee_skill",
+    "ratk": "ranged_skill",
+    "mdef": "melee_defense",
+    "rdef": "ranged_defense"
+  },
+  "archetypes": [
+    {
+      "name": "Shield User (Frontline Tank)",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "melee_defense", "min": 15 },
+        { "stat": "fatigue", "min": 120, "ideal": 130 },
+        { "stat": "hp", "min": 70, "ideal": 80 },
+        { "stat": "resolve", "min": 45 }
+      ]
+    },
+    {
+      "name": "Two-Handed Battle Forged Frontline",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "melee_defense", "min": 30 },
+        { "stat": "fatigue", "min": 130 },
+        { "stat": "hp", "min": 70 },
+        { "stat": "resolve", "min": 45, "ideal": 55 }
+      ]
+    },
+    {
+      "name": "One-Handed Battle Forged Frontline",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "melee_defense", "min": 40 },
+        { "stat": "fatigue", "min": 130 },
+        { "stat": "hp", "min": 70 },
+        { "stat": "resolve", "min": 45, "ideal": 55 },
+        { "stat": "ranged_defense", "min": 10 }
+      ]
+    },
+    {
+      "name": "One-Handed Nimble Dodge Frontline",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "initiative", "min": 150 },
+        { "stat": "melee_defense", "min": 25 },
+        { "stat": "hp", "min": 70 },
+        { "stat": "fatigue", "min": 100 },
+        { "stat": "resolve", "min": 40 }
+      ]
+    },
+    {
+      "name": "Sergeant",
+      "requirements": [
+        { "stat": "resolve", "min": 90 },
+        { "stat": "fatigue", "min": 120 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "melee_defense", "min": 10 },
+        { "stat": "ranged_defense", "min": 10 },
+        { "stat": "melee_skill", "min": 85, "optional": true, "note": "nice-to-have, not required" }
+      ]
+    },
+    {
+      "name": "Polearm Backline (Battle Forged)",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "melee_defense", "min": 15 },
+        { "stat": "fatigue", "min": 110, "ideal": 125 },
+        { "stat": "resolve", "min": 40 },
+        { "stat": "ranged_defense", "min": 10 }
+      ]
+    },
+    {
+      "name": "Polearm Backline (Nimble)",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "initiative", "min": 150 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "fatigue", "min": 110 },
+        { "stat": "resolve", "min": 40 },
+        { "stat": "ranged_defense", "min": 10 }
+      ]
+    },
+    {
+      "name": "Archer",
+      "requirements": [
+        { "stat": "ranged_skill", "min": 85 },
+        { "stat": "initiative", "min": 150, "optional": true, "note": "only needed for Overwhelm-perk builds" },
+        { "stat": "hp", "min": 80 },
+        { "stat": "ranged_defense", "min": 15 },
+        { "stat": "fatigue", "min": 100 }
+      ]
+    },
+    {
+      "name": "Crossbow Man",
+      "requirements": [
+        { "stat": "ranged_skill", "min": 85 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "ranged_defense", "min": 15 },
+        { "stat": "fatigue", "min": 100 }
+      ]
+    },
+    {
+      "name": "Handgonne Man",
+      "requirements": [
+        { "stat": "ranged_skill", "min": 85 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "ranged_defense", "min": 15 },
+        { "stat": "fatigue", "min": 100 },
+        { "stat": "initiative", "min": 150, "optional": true, "note": "only needed for specific perk builds" },
+        { "stat": "resolve", "min": 60, "optional": true, "note": "only needed for specific perk builds" }
+      ]
+    },
+    {
+      "name": "Thrower",
+      "requirements": [
+        { "stat": "ranged_skill", "min": 85, "note": "lower bar OK for throwers" },
+        { "stat": "hp", "min": 80 },
+        { "stat": "ranged_defense", "min": 15 },
+        { "stat": "fatigue", "min": 100 }
+      ]
+    }
+  ]
+}
