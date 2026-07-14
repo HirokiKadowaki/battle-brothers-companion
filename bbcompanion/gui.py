@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (
     QSpinBox,
     QTableWidget,
     QTableWidgetItem,
+    QTextBrowser,
     QVBoxLayout,
     QWidget,
 )
@@ -151,6 +152,7 @@ class RecruitWindow(QMainWindow):
         self.stat_current_boxes = {}
         self.star_stat_combos = []
         self.star_count_boxes = []
+        self._guidance_by_name = {a["name"]: a.get("guidance") for a in self.calc.archetypes}
 
         self.setWindowTitle("Battle Brothers Recruit Potential Calculator")
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
@@ -238,11 +240,19 @@ class RecruitWindow(QMainWindow):
         self.stat_table.horizontalHeader().setStretchLastSection(True)
         layout.addWidget(self.stat_table)
 
-        layout.addWidget(QLabel("Build Archetype Fit"))
-        self.archetype_table = QTableWidget(0, 3)
-        self.archetype_table.setHorizontalHeaderLabels(["Archetype", "Verdict", "Limiting Stat(s)"])
+        layout.addWidget(QLabel("Build Archetype Fit  (click a row for perks & priorities)"))
+        self.archetype_table = QTableWidget(0, 4)
+        self.archetype_table.setHorizontalHeaderLabels(["Archetype", "Verdict", "Score", "Limiting Stat(s)"])
         self.archetype_table.horizontalHeader().setStretchLastSection(True)
+        self.archetype_table.setSelectionBehavior(QTableWidget.SelectRows)
+        self.archetype_table.setEditTriggers(QTableWidget.NoEditTriggers)
+        self.archetype_table.itemSelectionChanged.connect(self.on_archetype_selected)
         layout.addWidget(self.archetype_table)
+
+        self.archetype_detail = QTextBrowser()
+        self.archetype_detail.setMinimumHeight(150)
+        self.archetype_detail.setPlaceholderText("Select an archetype above to see how to build it.")
+        layout.addWidget(self.archetype_detail)
 
         return box
 
@@ -287,10 +297,46 @@ class RecruitWindow(QMainWindow):
             verdict_item.setForeground(Qt.white)
             verdict_item.setBackground(self._qcolor(color))
             self.archetype_table.setItem(row, 1, verdict_item)
+            score_item = QTableWidgetItem(f"{fit.rating:.1f}/10")
+            score_item.setTextAlignment(Qt.AlignCenter)
+            self.archetype_table.setItem(row, 2, score_item)
             limiting = ", ".join(STAT_LABELS[s] for s in fit.limiting_stats) or "-"
-            self.archetype_table.setItem(row, 2, QTableWidgetItem(limiting))
+            self.archetype_table.setItem(row, 3, QTableWidgetItem(limiting))
 
         self._set_overall_verdict(overall, fits)
+
+        # Show the best-fit build's guidance right away (fits are ranked best-first).
+        if fits:
+            self.archetype_table.selectRow(0)
+
+    def on_archetype_selected(self):
+        items = self.archetype_table.selectedItems()
+        if not items:
+            return
+        name_item = self.archetype_table.item(items[0].row(), 0)
+        if name_item is None:
+            return
+        name = name_item.text()
+        guidance = self._guidance_by_name.get(name)
+        if not guidance:
+            self.archetype_detail.setHtml(f"<b>{name}</b><br>No build guidance available.")
+            return
+
+        def pretty(token):
+            for key, label in STAT_LABELS.items():
+                token = token.replace(key, label)
+            return token
+
+        priorities = " &rarr; ".join(pretty(t) for t in guidance["level_up_priority"])
+        perks = ", ".join(guidance["key_perks"])
+        weapons = ", ".join(guidance["weapons"])
+        self.archetype_detail.setHtml(
+            f'<h3 style="margin:2px 0;">{name}</h3>'
+            f'<p style="margin:2px 0;">{guidance["playstyle"]}</p>'
+            f'<p style="margin:6px 0 2px 0;"><b>Level-up priority:</b> {priorities}</p>'
+            f'<p style="margin:2px 0;"><b>Key perks:</b> {perks}</p>'
+            f'<p style="margin:2px 0;"><b>Weapons / gear:</b> {weapons}</p>'
+        )
 
     def _qcolor(self, hex_color):
         return QColor(hex_color)

@@ -5,6 +5,35 @@ from .data_loader import STATS, load_archetypes, load_backgrounds, load_talents
 CLOSE_MARGIN_RATIO = 0.08
 CLOSE_MARGIN_MIN = 5
 
+# 0-10 build-fit rating tuning.
+# A stat that exactly meets its threshold scores THRESHOLD_SATISFACTION; hitting
+# the "ideal" value (or HEADROOM_TARGET_RATIO x threshold when no ideal is given)
+# scores a full 1.0; falling SHORTFALL_ZERO_FRAC below the threshold scores 0.
+HEADROOM_TARGET_RATIO = 1.15
+THRESHOLD_SATISFACTION = 0.7
+SHORTFALL_ZERO_FRAC = 0.20
+# Weight by the stat's rank in the archetype's requirement order (primary stat
+# first). Primary highest, then decaying, floored at a flat baseline.
+PRIMARY_WEIGHT = 3.0
+WEIGHT_STEP = 0.7
+BASELINE_WEIGHT = 1.0
+
+
+def _stat_satisfaction(value: float, min_v: float, ideal) -> float:
+    """Return how well `value` satisfies a requirement, in [0, 1]."""
+    target = ideal if ideal is not None else min_v * HEADROOM_TARGET_RATIO
+    if value >= target:
+        return 1.0
+    if value >= min_v:
+        if target <= min_v:
+            return 1.0
+        return THRESHOLD_SATISFACTION + (1.0 - THRESHOLD_SATISFACTION) * (value - min_v) / (target - min_v)
+    # Below the threshold: fall from THRESHOLD_SATISFACTION at min_v to 0.
+    zero_at = min_v * (1 - SHORTFALL_ZERO_FRAC)
+    if value <= zero_at:
+        return 0.0
+    return THRESHOLD_SATISFACTION * (value - zero_at) / (min_v - zero_at)
+
 
 @dataclass
 class StatProjection:
@@ -22,6 +51,7 @@ class ArchetypeFit:
     name: str
     verdict: str  # "good", "marginal", "poor"
     margin_score: float
+    rating: float  # 0.0-10.0, weighted by stat priority
     limiting_stats: list = field(default_factory=list)
     details: list = field(default_factory=list)
 
@@ -68,7 +98,7 @@ class RecruitCalculator:
             projected_values[stat] = projected
 
         fits = [self._fit_archetype(a, projected_values) for a in self.archetypes]
-        fits.sort(key=lambda f: (_VERDICT_ORDER[f.verdict], -f.margin_score))
+        fits.sort(key=lambda f: (_VERDICT_ORDER[f.verdict], -f.rating))
 
         if any(f.verdict == "good" for f in fits):
             overall = "recommend"
@@ -85,6 +115,9 @@ class RecruitCalculator:
         details = []
         has_fail = False
         has_close = False
+        weighted_sat = 0.0
+        total_weight = 0.0
+        rank = 0  # position among required (non-optional) stats -> importance
 
         for req in archetype["requirements"]:
             stat = req["stat"]
@@ -109,7 +142,14 @@ class RecruitCalculator:
                 has_close = True
                 limiting.append(stat)
 
+            # Weighted 0-1 satisfaction: earlier (more important) stats weigh more.
+            weight = max(BASELINE_WEIGHT, PRIMARY_WEIGHT - rank * WEIGHT_STEP)
+            weighted_sat += weight * _stat_satisfaction(value, min_v, req.get("ideal"))
+            total_weight += weight
+            rank += 1
+
         margin_score = sum(required_margins) / len(required_margins) if required_margins else 0
+        rating = round(10.0 * weighted_sat / total_weight, 1) if total_weight else 0.0
 
         if has_fail:
             verdict = "poor"
@@ -122,6 +162,7 @@ class RecruitCalculator:
             name=archetype["name"],
             verdict=verdict,
             margin_score=round(margin_score, 3),
+            rating=rating,
             limiting_stats=limiting,
             details=details,
         )
