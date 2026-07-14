@@ -1,6 +1,7 @@
 import difflib
 import re
 import shutil
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -16,9 +17,30 @@ if shutil.which("tesseract") is None and _FALLBACK_TESSERACT.exists():
     pytesseract.pytesseract.tesseract_cmd = str(_FALLBACK_TESSERACT)
 
 BACKGROUND_NAME_MATCH_THRESHOLD = 0.6
-STAR_MATCH_THRESHOLD = 0.7
-STAR_LOW_CONFIDENCE_THRESHOLD = 0.55
 MAX_STARS = 3
+
+# --- Fixed layout of the roster/character stats panel -----------------------
+# The panel is a 2-column x 8-row grid of "icon + value-bar" cells. The 8
+# attributes we care about live at fixed (column, row) positions, so the user
+# only calibrates ONE box around the whole grid and we derive every cell from
+# these fractions. Fractions are relative to that panel box, so they are
+# resolution-independent (the whole UI scales together).
+#
+# Columns: (center_x_fraction, width_fraction). Rows: 0-7 top to bottom.
+_LEFT_COL = (0.34, 0.42)
+_RIGHT_COL = (0.82, 0.32)
+STAT_GRID = {
+    "hp": (_LEFT_COL, 2),
+    "fatigue": (_LEFT_COL, 4),
+    "resolve": (_LEFT_COL, 6),
+    "initiative": (_LEFT_COL, 7),
+    "melee_skill": (_RIGHT_COL, 0),
+    "ranged_skill": (_RIGHT_COL, 1),
+    "melee_defense": (_RIGHT_COL, 2),
+    "ranged_defense": (_RIGHT_COL, 3),
+}
+_VALUE_CELL_HEIGHT_FRAC = 0.55  # of one row's height
+_STAR_MIN_BLOB_AREA_FRAC = 0.003  # of the star-slot area; scale-invariant
 
 
 @dataclass
@@ -34,12 +56,91 @@ def capture_region(sct, box: dict) -> Image.Image:
     return Image.frombytes("RGB", shot.size, shot.bgra, "raw", "BGRX")
 
 
-def _preprocess_for_ocr(image: Image.Image) -> np.ndarray:
+def derive_grid_boxes(panel: dict) -> dict:
+    """Given the calibrated panel box (screen coords), return the value-cell and
+    star-slot boxes for every stat, keyed '<stat>_value' and '<stat>_stars'.
+    Rows span the full box height (used when no image is available to refine)."""
+    return _derive(panel["x"], panel["y"], panel["w"], 0, panel["h"])
+
+
+def detect_grid_vbounds(panel_image: Image.Image) -> tuple[int, int]:
+    """Find the stat grid's top/bottom within a (possibly loosely-drawn) panel
+    crop by locating the full-width-dark divider bands between rows. Returns
+    (y0, y1) in panel-local pixels; falls back to the full height on failure.
+
+    This makes calibration forgiving: the user drags a rough box and we snap to
+    the real grid, instead of assuming the grid exactly fills the drawn box."""
+    a = np.array(panel_image.convert("RGB")).astype(int)
+    h, w = a.shape[:2]
+    dark_rows = np.where((a.mean(axis=2) < 45).sum(axis=1) > 0.9 * w)[0]
+    if len(dark_rows) < 2:
+        return 0, h
+    # Cluster runs of adjacent dark rows into single divider lines.
+    lines, cur = [], [dark_rows[0]]
+    for y in dark_rows[1:]:
+        if y - cur[-1] <= 2:
+            cur.append(y)
+        else:
+            lines.append(int(np.mean(cur)))
+            cur = [y]
+    lines.append(int(np.mean(cur)))
+    if len(lines) < 2:
+        return 0, h
+    return lines[0], lines[-1]
+
+
+def derive_grid_boxes_from_image(panel: dict, panel_image: Image.Image) -> dict:
+    """Like derive_grid_boxes but snaps the 8 rows to the grid detected inside
+    panel_image. Returned boxes are in the same screen coords as `panel`."""
+    gy0, gy1 = detect_grid_vbounds(panel_image)
+    return _derive(panel["x"], panel["y"], panel["w"], gy0, gy1 - gy0)
+
+
+def _derive(px: int, py: int, pw: int, grid_top: int, grid_h: int) -> dict:
+    row_h = grid_h / 8
+    boxes = {}
+    for stat, ((col_xc, col_w), row) in STAT_GRID.items():
+        cx = px + col_xc * pw
+        w = col_w * pw
+        cy = py + grid_top + (row + 0.5) / 8 * grid_h
+        vh = _VALUE_CELL_HEIGHT_FRAC * row_h
+        boxes[f"{stat}_value"] = {
+            "x": int(cx - w / 2),
+            "y": int(cy - vh / 2),
+            "w": int(w),
+            "h": int(vh),
+        }
+        # Star icons sit at the top-left of the value bar; slot straddles the
+        # top edge of the row, over the bar's left portion.
+        boxes[f"{stat}_stars"] = {
+            "x": int(cx - 0.55 * w),
+            "y": int(py + grid_top + row / 8 * grid_h),
+            "w": int(0.65 * w),
+            "h": int(0.5 * row_h),
+        }
+    return boxes
+
+
+def _gray_upscaled(image: Image.Image, factor: int = 4) -> np.ndarray:
     gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
-    scaled = cv2.resize(gray, None, fx=3, fy=3, interpolation=cv2.INTER_CUBIC)
-    # Battle Brothers panels are dark with light text; Otsu handles either polarity,
-    # try both and let the caller's OCR confidence decide which read to keep.
-    _, thresh = cv2.threshold(scaled, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    return cv2.resize(gray, None, fx=factor, fy=factor, interpolation=cv2.INTER_CUBIC)
+
+
+def _min_channel_upscaled(image: Image.Image, factor: int = 4) -> np.ndarray:
+    # min(R,G,B) per pixel: white digits stay bright (all channels high) while
+    # the warm tan "fill bar" texture and gold talent stars (low blue channel)
+    # go dark. This separates the number from both far better than luminance,
+    # which keeps the bright-but-warm fill and stars as OCR noise.
+    arr = np.array(image)
+    minc = np.minimum(np.minimum(arr[:, :, 0], arr[:, :, 1]), arr[:, :, 2])
+    return cv2.resize(minc, None, fx=factor, fy=factor, interpolation=cv2.INTER_CUBIC)
+
+
+def _binarize(gray: np.ndarray, mode: str) -> np.ndarray:
+    if mode == "otsu":
+        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    else:  # "fixedNNN" -> fixed threshold at NNN
+        _, thresh = cv2.threshold(gray, int(mode[5:]), 255, cv2.THRESH_BINARY)
     return thresh
 
 
@@ -55,34 +156,29 @@ def _ocr_with_confidence(image: np.ndarray, config: str) -> tuple[str, float]:
 
 
 def read_stat_value(image: Image.Image) -> FieldRead:
-    processed = _preprocess_for_ocr(image)
-    # psm 4 (single column of variable-size text) reliably keeps "current/max"
-    # values like "59/59" as separate tokens; psm 7 (single line) tends to
-    # merge them into garbage (e.g. "59759") on real in-game crops that have
-    # a border/icon bleeding into the frame.
-    config = "--psm 4 -c tessedit_char_whitelist=0123456789/-"
-    text, conf = _ocr_with_confidence(processed, config)
+    gray = _min_channel_upscaled(image)
+    config = "--psm 7 -c tessedit_char_whitelist=0123456789/-"
+    # Read under several thresholds and majority-vote. In-game crops report OCR
+    # confidence 0, so agreement across thresholds is a more useful confidence
+    # signal for the GUI's low-confidence flagging than Tesseract's own number.
+    reads = []
+    for mode in ("fixed140", "fixed155", "otsu"):
+        text, _ = _ocr_with_confidence(_binarize(gray, mode), config)
+        numbers = re.findall(r"-?\d+", text)
+        if numbers:
+            # Stats can be shown as "current/max" (e.g. HP "59/59"); the last
+            # number is the max/base attribute (current == max for a fresh hire).
+            reads.append(int(numbers[-1]))
 
-    # Otsu can pick the wrong polarity on some crops; if nothing usable came out,
-    # retry against the inverted image before giving up.
-    if not text:
-        inverted = cv2.bitwise_not(processed)
-        text, conf = _ocr_with_confidence(inverted, config)
-
-    numbers = re.findall(r"-?\d+", text)
-    if not numbers:
+    if not reads:
         return FieldRead(value=0, confidence=0.0)
-
-    # Stats are often shown as "current/max" (e.g. HP "59/59"); the max is the
-    # base attribute we want, and for a freshly hired recruit current == max.
-    value = int(numbers[-1])
-    return FieldRead(value=value, confidence=conf)
+    value, agree = Counter(reads).most_common(1)[0]
+    return FieldRead(value=value, confidence=agree / 3.0)
 
 
 def read_background_name(image: Image.Image, candidates: list[str]) -> FieldRead:
-    processed = _preprocess_for_ocr(image)
-    config = "--psm 7"
-    text, conf = _ocr_with_confidence(processed, config)
+    gray = _gray_upscaled(image, factor=3)
+    text, conf = _ocr_with_confidence(_binarize(gray, "otsu"), "--psm 7")
     text = text.strip()
     if not text:
         return FieldRead(value=None, confidence=0.0)
@@ -95,45 +191,24 @@ def read_background_name(image: Image.Image, candidates: list[str]) -> FieldRead
     return FieldRead(value=matches[0], confidence=min(conf, similarity) if conf else similarity)
 
 
-def count_stars(image: Image.Image, star_template: np.ndarray) -> FieldRead:
-    """Slide the single-star template across `image` and count non-overlapping matches."""
-    gray = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
-    template_gray = cv2.cvtColor(star_template, cv2.COLOR_RGB2GRAY) if star_template.ndim == 3 else star_template
+def count_stars(image: Image.Image) -> FieldRead:
+    """Count gold talent-star icons in a star-slot crop by their distinctive
+    yellow color (more scale-robust than template matching). Presence is
+    reliable; exact 1/2/3 count is best-effort, so callers flag it for review."""
+    arr = np.array(image).astype(int)
+    r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
+    mask = ((r > 170) & (g > 130) & (b < 110) & (r - b > 80)).astype(np.uint8)
 
-    th, tw = template_gray.shape[:2]
-    ih, iw = gray.shape[:2]
-    if th > ih or tw > iw:
-        # The template and each stat's star-slot box are drawn freehand during
-        # calibration and can end up slightly different sizes; shrink the
-        # template (with a small safety margin) rather than failing outright.
-        scale = min(ih / th, iw / tw) * 0.9
-        tw, th = max(1, int(tw * scale)), max(1, int(th * scale))
-        if tw < 1 or th < 1:
-            return FieldRead(value=0, confidence=1.0)
-        template_gray = cv2.resize(template_gray, (tw, th), interpolation=cv2.INTER_AREA)
+    total_gold = int(mask.sum())
+    if total_gold == 0:
+        return FieldRead(value=0, confidence=1.0)  # confident: no stars
 
-    result = cv2.matchTemplate(gray, template_gray, cv2.TM_CCOEFF_NORMED)
-    matches = []
-    confidences = []
-    search = result.copy()
-    for _ in range(MAX_STARS):
-        _, max_val, _, max_loc = cv2.minMaxLoc(search)
-        if max_val < STAR_MATCH_THRESHOLD:
-            break
-        matches.append(max_loc)
-        confidences.append(max_val)
-        x, y = max_loc
-        # Suppress the region around this match so the next iteration finds a
-        # different star instead of re-matching the same one.
-        x0, x1 = max(0, x - tw // 2), min(search.shape[1], x + tw // 2)
-        y0, y1 = max(0, y - th // 2), min(search.shape[0], y + th // 2)
-        search[y0:y1, x0:x1] = -1.0
+    n_labels, _, stats, _ = cv2.connectedComponentsWithStats(mask, connectivity=8)
+    area = image.size[0] * image.size[1]
+    min_blob = max(3, area * _STAR_MIN_BLOB_AREA_FRAC)
+    blobs = [i for i in range(1, n_labels) if stats[i, cv2.CC_STAT_AREA] >= min_blob]
 
-    count = len(matches)
-    confidence = min(confidences) if confidences else 1.0  # 0 stars found = confident "no stars"
-    return FieldRead(value=count, confidence=confidence)
-
-
-def load_star_template(path: Path) -> np.ndarray:
-    img = Image.open(path).convert("RGB")
-    return np.array(img)
+    count = max(1, min(MAX_STARS, len(blobs)))
+    # Star count is inherently fuzzy at low resolution; keep confidence modest
+    # so the GUI prompts the user to double-check.
+    return FieldRead(value=count, confidence=0.5)

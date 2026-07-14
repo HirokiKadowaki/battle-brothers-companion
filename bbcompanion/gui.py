@@ -175,7 +175,7 @@ class RecruitWindow(QMainWindow):
         capture_btn.clicked.connect(self.capture_and_fill)
         button_row.addWidget(capture_btn)
 
-        calibrate_btn = QPushButton("Calibrate Screen Regions...")
+        calibrate_btn = QPushButton("Calibrate Stats Panel...")
         calibrate_btn.clicked.connect(self.on_calibrate)
         button_row.addWidget(calibrate_btn)
         root.addLayout(button_row)
@@ -337,57 +337,66 @@ class RecruitWindow(QMainWindow):
             QMessageBox.information(
                 self,
                 "Calibration Needed",
-                "No screen regions are calibrated yet. Click 'Calibrate Screen Regions...' first, "
-                "then try Ctrl+Alt+R again on a recruit's hire screen.",
+                "The stats panel isn't calibrated yet. Click 'Calibrate Stats Panel...' first "
+                "(draw one box around the stats grid), then press Ctrl+Alt+R on a recruit's "
+                "character sheet.",
             )
             return
 
-        regions = calibration.load_screen_regions()
-        star_template = screen_reader.load_star_template(calibration.STAR_TEMPLATE_PATH)
+        panel = calibration.load_screen_regions()["panel"]
 
         for spin in self.stat_current_boxes.values():
             spin.setStyleSheet("")
-        self.background_combo.setStyleSheet("")
 
         was_visible = self.isVisible()
         self.hide()
-        QApplication.processEvents()
-        time.sleep(0.15)
+        # Fully clear this window off the screen before grabbing: the desktop
+        # needs time to repaint the game underneath, or our own (dark) window
+        # bleeds into the capture over whatever cells it overlapped — which is
+        # why top-of-panel cells like HP/Melee Skill would read 0 on repeat
+        # captures once the window had been raised to the front.
+        for _ in range(10):
+            QApplication.processEvents()
+            time.sleep(0.03)
 
+        star_hits = []
         try:
-            star_hits = []
             with mss.mss() as sct:
-                bg_box = regions.get("background_name")
-                if bg_box:
-                    img = screen_reader.capture_region(sct, bg_box)
-                    result = screen_reader.read_background_name(img, self.calc.background_names())
-                    if result.value:
-                        idx = self.background_combo.findText(result.value)
-                        if idx >= 0:
-                            self.background_combo.setCurrentIndex(idx)
-                    if result.value is None or result.confidence < LOW_CONFIDENCE_THRESHOLD:
-                        self._mark_field_confidence(self.background_combo, 0.0)
+                # One grab of the whole panel, then crop cells from it — avoids
+                # 16 separate grabs racing the compositor at different moments.
+                panel_img = screen_reader.capture_region(sct, panel)
+            panel_img.save(calibration.LOCAL_CONFIG_DIR / "last_capture.png")
 
-                for stat in STATS:
-                    value_box = regions.get(f"{stat}_value")
-                    if value_box:
-                        img = screen_reader.capture_region(sct, value_box)
-                        result = screen_reader.read_stat_value(img)
-                        self.stat_current_boxes[stat].setValue(result.value)
-                        self._mark_field_confidence(self.stat_current_boxes[stat], result.confidence)
+            # Snap the 8 rows to the grid actually detected in the capture, so a
+            # roughly-drawn calibration box still lines up cell-for-cell.
+            boxes = screen_reader.derive_grid_boxes_from_image(panel, panel_img)
 
-                    star_box = regions.get(f"{stat}_stars")
-                    if star_box:
-                        img = screen_reader.capture_region(sct, star_box)
-                        star_result = screen_reader.count_stars(img, star_template)
-                        if star_result.value > 0:
-                            star_hits.append((stat, star_result.value))
+            def cell_crop(box):
+                x0 = box["x"] - panel["x"]
+                y0 = box["y"] - panel["y"]
+                return panel_img.crop((x0, y0, x0 + box["w"], y0 + box["h"]))
+
+            for stat in STATS:
+                value_box = boxes.get(f"{stat}_value")
+                if value_box:
+                    result = screen_reader.read_stat_value(cell_crop(value_box))
+                    self.stat_current_boxes[stat].setValue(result.value)
+                    self._mark_field_confidence(self.stat_current_boxes[stat], result.confidence)
+
+                star_box = boxes.get(f"{stat}_stars")
+                if star_box:
+                    star_result = screen_reader.count_stars(cell_crop(star_box))
+                    if star_result.value > 0:
+                        star_hits.append((stat, star_result.value))
         finally:
             if was_visible:
                 self.show()
                 self.raise_()
                 self.activateWindow()
 
+        # Battle Brothers gives every recruit stars on exactly 3 attributes, so
+        # keep at most 3 detected; the user reviews/corrects these regardless.
+        star_hits = star_hits[:3]
         for i, (combo, spin) in enumerate(zip(self.star_stat_combos, self.star_count_boxes)):
             if i < len(star_hits):
                 stat, count = star_hits[i]
@@ -399,10 +408,11 @@ class RecruitWindow(QMainWindow):
                 spin.setValue(0)
 
         self.verdict_label.setText(
-            "Auto-filled from screen capture — please review highlighted fields, then Evaluate."
+            "Auto-filled from screen. Background isn't on this panel — set it manually. "
+            "Review star counts and any red field, then Evaluate."
         )
         self.verdict_label.setStyleSheet(
-            "font-size: 14px; font-weight: bold; padding: 6px; color: white; background-color: #455a64;"
+            "font-size: 13px; font-weight: bold; padding: 6px; color: white; background-color: #455a64;"
         )
 
 
