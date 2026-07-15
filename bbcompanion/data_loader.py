@@ -39,3 +39,9 @@ def load_talents():
 def load_archetypes():
     with open(DATA_DIR / "archetypes.json", encoding="utf-8") as f:
         return json.load(f)["archetypes"]
+
+
+def load_background_tips():
+    """Recommended backgrounds grouped by campaign phase (early/mid/late)."""
+    with open(DATA_DIR / "background_tips.json", encoding="utf-8") as f:
+        return json.load(f)["phases"]

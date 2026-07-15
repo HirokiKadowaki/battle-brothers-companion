@@ -8,6 +8,7 @@ from PyQt5.QtGui import QColor, QPainter, QPalette, QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
     QComboBox,
+    QDialog,
     QGridLayout,
     QGroupBox,
     QHBoxLayout,
@@ -25,7 +26,7 @@ from PyQt5.QtWidgets import (
 
 from . import calibration, screen_reader
 from .calculator import RecruitCalculator
-from .data_loader import STATS, STAT_LABELS
+from .data_loader import STATS, STAT_LABELS, load_background_tips
 
 TOGGLE_HOTKEY = "ctrl+alt+b"
 CAPTURE_HOTKEY = "ctrl+alt+r"
@@ -154,6 +155,13 @@ class RecruitWindow(QMainWindow):
         self.star_count_boxes = []
         self._guidance_by_name = {a["name"]: a.get("guidance") for a in self.calc.archetypes}
 
+        # Which campaign phase(s) each background is a recommended hire for.
+        self._background_phases = load_background_tips()
+        self._phases_by_background = {}
+        for phase in self._background_phases:
+            for bg_name in phase["backgrounds"]:
+                self._phases_by_background.setdefault(bg_name, []).append(phase["label"])
+
         self.setWindowTitle("Battle Brothers Recruit Potential Calculator")
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
         self.setAttribute(Qt.WA_TranslucentBackground, False)
@@ -177,6 +185,10 @@ class RecruitWindow(QMainWindow):
         capture_btn.clicked.connect(self.capture_and_fill)
         button_row.addWidget(capture_btn)
 
+        tips_btn = QPushButton("Background Tips...")
+        tips_btn.clicked.connect(self.on_background_tips)
+        button_row.addWidget(tips_btn)
+
         calibrate_btn = QPushButton("Calibrate Stats Panel...")
         calibrate_btn.clicked.connect(self.on_calibrate)
         button_row.addWidget(calibrate_btn)
@@ -194,7 +206,13 @@ class RecruitWindow(QMainWindow):
         layout.addWidget(QLabel("Background:"), 0, 0)
         self.background_combo = QComboBox()
         self.background_combo.addItems(self.calc.background_names())
-        layout.addWidget(self.background_combo, 0, 1, 1, 3)
+        self.background_combo.currentTextChanged.connect(self._update_background_phase_note)
+        layout.addWidget(self.background_combo, 0, 1, 1, 2)
+
+        self.background_phase_label = QLabel("")
+        self.background_phase_label.setStyleSheet("color: #b0bec5; font-style: italic;")
+        layout.addWidget(self.background_phase_label, 0, 3)
+        self._update_background_phase_note(self.background_combo.currentText())
 
         layout.addWidget(QLabel("Current stat rolls"), 1, 0, 1, 4)
         row = 2
@@ -308,6 +326,38 @@ class RecruitWindow(QMainWindow):
         # Show the best-fit build's guidance right away (fits are ranked best-first).
         if fits:
             self.archetype_table.selectRow(0)
+
+    def _update_background_phase_note(self, background_name: str):
+        phases = self._phases_by_background.get(background_name)
+        self.background_phase_label.setText(
+            f"{' / '.join(phases)} pick" if phases else "—"
+        )
+
+    def on_background_tips(self):
+        sections = []
+        for phase in self._background_phases:
+            names = ", ".join(phase["backgrounds"])
+            sections.append(
+                f'<h3 style="margin:8px 0 2px 0;">{phase["label"]}</h3>'
+                f'<p style="margin:0 0 2px 0; color:#b0bec5;"><i>{phase.get("hint", "")}</i></p>'
+                f'<p style="margin:0;">{names}</p>'
+            )
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Background Tips")
+        dialog.resize(460, 420)
+        layout = QVBoxLayout(dialog)
+        browser = QTextBrowser()
+        browser.setHtml(
+            "".join(sections)
+            + '<p style="margin-top:10px; color:#90a4ae; font-size:11px;">'
+            "Rough guide only — a great roll on a cheap background still beats "
+            "a bad roll on an expensive one.</p>"
+        )
+        layout.addWidget(browser)
+        close_btn = QPushButton("Close")
+        close_btn.clicked.connect(dialog.accept)
+        layout.addWidget(close_btn)
+        dialog.exec_()
 
     def on_archetype_selected(self):
         items = self.archetype_table.selectedItems()
