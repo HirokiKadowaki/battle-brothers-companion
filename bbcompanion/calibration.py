@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 import mss
 from PIL import Image
@@ -15,7 +14,8 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-LOCAL_CONFIG_DIR = Path(__file__).resolve().parent.parent / "local_config"
+from .data_loader import LOCAL_CONFIG_DIR
+
 SCREEN_REGIONS_PATH = LOCAL_CONFIG_DIR / "screen_regions.json"
 
 INSTRUCTION = (

@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import (
     QGroupBox,
     QHBoxLayout,
     QLabel,
+    QLineEdit,
     QMainWindow,
     QMessageBox,
     QPushButton,
@@ -24,7 +25,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from . import calibration, screen_reader
+from . import calibration, roster, screen_reader
 from .calculator import RecruitCalculator
 from .data_loader import STATS, STAT_LABELS, load_background_tips
 
@@ -153,6 +154,11 @@ class RecruitWindow(QMainWindow):
         self.stat_current_boxes = {}
         self.star_stat_combos = []
         self.star_count_boxes = []
+        self._last_evaluation = None
+        # Non-modal windows must be kept referenced or Qt garbage-collects them
+        # the moment the opening method returns.
+        self._roster_window = None
+        self._tips_window = None
         self._guidance_by_name = {a["name"]: a.get("guidance") for a in self.calc.archetypes}
 
         # Which campaign phase(s) each background is a recommended hire for.
@@ -184,6 +190,16 @@ class RecruitWindow(QMainWindow):
         capture_btn = QPushButton(f"Read Recruit From Screen ({CAPTURE_HOTKEY})")
         capture_btn.clicked.connect(self.capture_and_fill)
         button_row.addWidget(capture_btn)
+
+        self.add_roster_btn = QPushButton("Add to Roster...")
+        self.add_roster_btn.clicked.connect(self.on_add_to_roster)
+        self.add_roster_btn.setEnabled(False)  # needs an evaluation to snapshot
+        self.add_roster_btn.setToolTip("Evaluate a recruit first")
+        button_row.addWidget(self.add_roster_btn)
+
+        roster_btn = QPushButton("Roster...")
+        roster_btn.clicked.connect(self.on_open_roster)
+        button_row.addWidget(roster_btn)
 
         tips_btn = QPushButton("Background Tips...")
         tips_btn.clicked.connect(self.on_background_tips)
@@ -295,6 +311,16 @@ class RecruitWindow(QMainWindow):
 
         projections, fits, overall = self.calc.evaluate_recruit(background, current_stats, star_assignments)
 
+        # Kept so "Add to Roster" can snapshot this evaluation without recomputing.
+        self._last_evaluation = {
+            "background": background,
+            "current_stats": current_stats,
+            "stars": star_assignments,
+            "projected": {p.stat: p.projected for p in projections},
+            "fits": {f.name: f for f in fits},
+        }
+        self.add_roster_btn.setEnabled(True)
+
         self.stat_table.setRowCount(len(projections))
         for row, proj in enumerate(projections):
             values = [
@@ -333,31 +359,139 @@ class RecruitWindow(QMainWindow):
             f"{' / '.join(phases)} pick" if phases else "—"
         )
 
-    def on_background_tips(self):
-        sections = []
-        for phase in self._background_phases:
-            names = ", ".join(phase["backgrounds"])
-            sections.append(
-                f'<h3 style="margin:8px 0 2px 0;">{phase["label"]}</h3>'
-                f'<p style="margin:0 0 2px 0; color:#b0bec5;"><i>{phase.get("hint", "")}</i></p>'
-                f'<p style="margin:0;">{names}</p>'
-            )
-        dialog = QDialog(self)
-        dialog.setWindowTitle("Background Tips")
-        dialog.resize(460, 420)
-        layout = QVBoxLayout(dialog)
-        browser = QTextBrowser()
-        browser.setHtml(
-            "".join(sections)
-            + '<p style="margin-top:10px; color:#90a4ae; font-size:11px;">'
-            "Rough guide only — a great roll on a cheap background still beats "
-            "a bad roll on an expensive one.</p>"
+    def on_add_to_roster(self):
+        if not self._last_evaluation:
+            return
+        evaluation = self._last_evaluation
+
+        # Default to whichever archetype is selected in the results table (which
+        # auto-selects the best fit after an evaluation).
+        selected = self.archetype_table.selectedItems()
+        default_archetype = (
+            self.archetype_table.item(selected[0].row(), 0).text() if selected else ""
         )
-        layout.addWidget(browser)
-        close_btn = QPushButton("Close")
-        close_btn.clicked.connect(dialog.accept)
-        layout.addWidget(close_btn)
-        dialog.exec_()
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Add to Roster")
+        dialog.resize(420, 170)
+        layout = QGridLayout(dialog)
+
+        layout.addWidget(QLabel("Name:"), 0, 0)
+        name_edit = QLineEdit()
+        name_edit.setPlaceholderText("e.g. Atiq Orcbane")
+        layout.addWidget(name_edit, 0, 1)
+
+        layout.addWidget(QLabel("Building toward:"), 1, 0)
+        archetype_combo = QComboBox()
+        archetype_combo.addItems([a["name"] for a in self.calc.archetypes])
+        if default_archetype:
+            archetype_combo.setCurrentText(default_archetype)
+        layout.addWidget(archetype_combo, 1, 1)
+
+        fit_label = QLabel()
+        fit_label.setStyleSheet("color: #b0bec5;")
+        layout.addWidget(fit_label, 2, 1)
+
+        def update_fit(archetype_name):
+            fit = evaluation["fits"].get(archetype_name)
+            if fit:
+                verdict_text = VERDICT_STYLE[fit.verdict][0]
+                fit_label.setText(f"{verdict_text} · {fit.rating:.1f}/10 for this recruit")
+            else:
+                fit_label.setText("")
+
+        archetype_combo.currentTextChanged.connect(update_fit)
+        update_fit(archetype_combo.currentText())
+
+        buttons = QHBoxLayout()
+        buttons.addStretch()
+        cancel_btn = QPushButton("Cancel")
+        cancel_btn.clicked.connect(dialog.reject)
+        buttons.addWidget(cancel_btn)
+        save_btn = QPushButton("Add")
+        save_btn.setDefault(True)
+        save_btn.clicked.connect(dialog.accept)
+        buttons.addWidget(save_btn)
+        layout.addLayout(buttons, 3, 0, 1, 2)
+
+        name_edit.setFocus()
+        if dialog.exec_() != QDialog.Accepted:
+            return
+
+        name = name_edit.text().strip()
+        if not name:
+            QMessageBox.warning(self, "Name Needed", "Give the brother a name so you can find him in the roster.")
+            self.on_add_to_roster()  # re-prompt rather than saving a nameless entry
+            return
+
+        archetype_name = archetype_combo.currentText()
+        fit = evaluation["fits"].get(archetype_name)
+        roster.add_brother(
+            {
+                "name": name,
+                "background": evaluation["background"],
+                "archetype": archetype_name,
+                "verdict": fit.verdict if fit else None,
+                "rating": fit.rating if fit else 0.0,
+                "current_stats": evaluation["current_stats"],
+                "stars": evaluation["stars"],
+                "projected": evaluation["projected"],
+            }
+        )
+        # If the roster is already open alongside us, show the new brother at once.
+        if self._roster_window is not None and self._roster_window.isVisible():
+            self._roster_window.refresh()
+
+        self.verdict_label.setText(f"{name} added to the roster as {archetype_name}.")
+        self.verdict_label.setStyleSheet(
+            "font-size: 14px; font-weight: bold; padding: 6px; color: white; background-color: #2e7d32;"
+        )
+
+    def on_open_roster(self):
+        # Imported here to avoid a circular import: roster_window reuses this
+        # module's BackgroundWidget/VERDICT_STYLE.
+        from .roster_window import RosterWindow
+
+        if self._roster_window is None:
+            self._roster_window = RosterWindow(self._guidance_by_name, self)
+        self._roster_window.refresh()
+        self._show_tool_window(self._roster_window)
+
+    def on_background_tips(self):
+        if self._tips_window is None:
+            sections = []
+            for phase in self._background_phases:
+                names = ", ".join(phase["backgrounds"])
+                sections.append(
+                    f'<h3 style="margin:8px 0 2px 0;">{phase["label"]}</h3>'
+                    f'<p style="margin:0 0 2px 0; color:#b0bec5;"><i>{phase.get("hint", "")}</i></p>'
+                    f'<p style="margin:0;">{names}</p>'
+                )
+            dialog = QDialog(self)
+            dialog.setWindowTitle("Background Tips")
+            dialog.resize(460, 420)
+            layout = QVBoxLayout(dialog)
+            browser = QTextBrowser()
+            browser.setHtml(
+                "".join(sections)
+                + '<p style="margin-top:10px; color:#90a4ae; font-size:11px;">'
+                "Rough guide only — a great roll on a cheap background still beats "
+                "a bad roll on an expensive one.</p>"
+            )
+            layout.addWidget(browser)
+            close_btn = QPushButton("Close")
+            close_btn.clicked.connect(dialog.hide)
+            layout.addWidget(close_btn)
+            self._tips_window = dialog
+        self._show_tool_window(self._tips_window)
+
+    @staticmethod
+    def _show_tool_window(window):
+        """Show a companion window non-modally, so the main window and the other
+        companion windows all stay usable alongside it."""
+        window.show()
+        window.raise_()
+        window.activateWindow()
 
     def on_archetype_selected(self):
         items = self.archetype_table.selectedItems()

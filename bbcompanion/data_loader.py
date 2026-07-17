@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+# Machine-local state (screen calibration, roster) — gitignored, not shipped data.
+LOCAL_CONFIG_DIR = Path(__file__).resolve().parent.parent / "local_config"
 
 STATS = [
     "hp",
