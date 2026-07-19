@@ -7,6 +7,7 @@ from PyQt5.QtCore import Qt, QObject, pyqtSignal
 from PyQt5.QtGui import QColor, QPainter, QPalette, QPixmap
 from PyQt5.QtWidgets import (
     QApplication,
+    QCheckBox,
     QComboBox,
     QDialog,
     QGridLayout,
@@ -14,6 +15,7 @@ from PyQt5.QtWidgets import (
     QHBoxLayout,
     QLabel,
     QLineEdit,
+    QListView,
     QMainWindow,
     QMessageBox,
     QPushButton,
@@ -69,7 +71,8 @@ QComboBox, QSpinBox {
 QComboBox QAbstractItemView {
     background-color: #2d2d2d;
     color: #eee;
-    selection-background-color: #555;
+    selection-background-color: #6495ed;
+    selection-color: #10151c;
 }
 QTableWidget {
     background-color: rgba(18, 18, 18, 210);
@@ -169,7 +172,15 @@ class RecruitWindow(QMainWindow):
                 self._phases_by_background.setdefault(bg_name, []).append(phase["label"])
 
         self.setWindowTitle("Battle Brothers Recruit Potential Calculator")
-        self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.Tool)
+        # A real window frame (not Qt.Tool) so it gets minimise/close buttons and
+        # a taskbar entry — Tool windows have neither, which left no way to get
+        # the overlay out of the way of other apps.
+        self.setWindowFlags(
+            Qt.Window
+            | Qt.WindowMinimizeButtonHint
+            | Qt.WindowCloseButtonHint
+            | Qt.WindowStaysOnTopHint
+        )
         self.setAttribute(Qt.WA_TranslucentBackground, False)
         self.resize(760, 640)
 
@@ -208,6 +219,12 @@ class RecruitWindow(QMainWindow):
         calibrate_btn = QPushButton("Calibrate Stats Panel...")
         calibrate_btn.clicked.connect(self.on_calibrate)
         button_row.addWidget(calibrate_btn)
+
+        self.on_top_check = QCheckBox("Stay on top")
+        self.on_top_check.setChecked(True)
+        self.on_top_check.setToolTip("Uncheck to let other windows (e.g. a browser) cover this one")
+        self.on_top_check.toggled.connect(self.on_toggle_always_on_top)
+        button_row.addWidget(self.on_top_check)
         root.addLayout(button_row)
 
         self.verdict_label = QLabel("")
@@ -222,6 +239,11 @@ class RecruitWindow(QMainWindow):
         layout.addWidget(QLabel("Background:"), 0, 0)
         self.background_combo = QComboBox()
         self.background_combo.addItems(self.calc.background_names())
+        # Qt's default popup uses the private QComboBoxListView, whose item
+        # painting swallows the selection highlight once the app stylesheet is
+        # applied — so type-to-jump (press "G" -> Gambler) landed on a row that
+        # looked identical to every other. A plain QListView paints it properly.
+        self.background_combo.setView(QListView())
         self.background_combo.currentTextChanged.connect(self._update_background_phase_note)
         layout.addWidget(self.background_combo, 0, 1, 1, 2)
 
@@ -541,6 +563,16 @@ class RecruitWindow(QMainWindow):
             color = "#c62828"
         self.verdict_label.setText(text)
         self.verdict_label.setStyleSheet(f"font-size: 16px; font-weight: bold; padding: 6px; color: white; background-color: {color};")
+
+    def on_toggle_always_on_top(self, stay_on_top: bool):
+        flags = self.windowFlags()
+        if stay_on_top:
+            flags |= Qt.WindowStaysOnTopHint
+        else:
+            flags &= ~Qt.WindowStaysOnTopHint
+        self.setWindowFlags(flags)
+        # Changing flags re-creates the native window, so it must be re-shown.
+        self.show()
 
     def toggle_visibility(self):
         if self.isVisible():

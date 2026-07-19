@@ -1,0 +1,61 @@
+{
+  "_source": "Role split and the standard 12-man target are paraphrased from WANG Chenhua's community guide (Builds and Company Composition, v1.4): https://steamcommunity.com/sharedfiles/filedetails/?id=1790093811 . It describes a common 12-brother company as 6 frontline + 6 backline, where the backline consists of 2-3 tile melee (polearm) users, a sergeant, and ranged brothers (archer / crossbow / thrower). The spearwall figure comes from the same guide's note that a decent spearwall line usually needs about 4 brothers.",
+  "_note": "Targets are per ROLE, since the guide gives role-level guidance rather than exact per-archetype counts. The UI shows your actual archetype breakdown inside each role, so you can still spot e.g. too many shield users without the app inventing a precise target for each build.",
+  "roles": [
+    {
+      "key": "frontline",
+      "label": "Frontline",
+      "archetypes": [
+        "Shield User (Frontline Tank)",
+        "Two-Handed Battle Forged Frontline",
+        "One-Handed Battle Forged Frontline",
+        "One-Handed Nimble Dodge Frontline"
+      ]
+    },
+    {
+      "key": "backline_melee",
+      "label": "Backline Melee",
+      "archetypes": [
+        "Polearm Backline (Battle Forged)",
+        "Polearm Backline (Nimble)"
+      ]
+    },
+    {
+      "key": "ranged",
+      "label": "Ranged",
+      "archetypes": [
+        "Archer",
+        "Crossbow Man",
+        "Handgonne Man",
+        "Thrower"
+      ]
+    },
+    {
+      "key": "support",
+      "label": "Support",
+      "archetypes": ["Sergeant"]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Standard 12 (6 front / 6 back)",
+      "note": "The guide's common company: 6 frontline and 6 backline, the backline being polearms, a sergeant and ranged brothers.",
+      "targets": { "frontline": 6, "backline_melee": 3, "ranged": 2, "support": 1 }
+    },
+    {
+      "name": "Spearwall + Polearm (12)",
+      "note": "Built around a spearwall line (~4 shield/spear brothers) with polearms striking over the top — the guide calls this a classic answer to most opponents, including Chosen.",
+      "targets": { "frontline": 5, "backline_melee": 4, "ranged": 2, "support": 1 }
+    },
+    {
+      "name": "Ranged-heavy (12)",
+      "note": "Leans on archers and crossbows to thin enemies before contact; needs a solid frontline to hold while they fire.",
+      "targets": { "frontline": 6, "backline_melee": 1, "ranged": 4, "support": 1 }
+    },
+    {
+      "name": "Early company (8)",
+      "note": "A smaller early-game band: mostly cheap frontline bodies with a couple of ranged, before you can afford specialists.",
+      "targets": { "frontline": 5, "backline_melee": 1, "ranged": 2, "support": 0 }
+    }
+  ]
+}

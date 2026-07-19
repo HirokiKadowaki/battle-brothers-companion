@@ -3,21 +3,29 @@
 from PyQt5.QtCore import QRectF, Qt, pyqtSignal
 from PyQt5.QtGui import QColor, QFontMetrics, QPainter, QPainterPath, QPen
 from PyQt5.QtWidgets import (
+    QComboBox,
     QDialog,
     QFrame,
     QGridLayout,
     QHBoxLayout,
+    QInputDialog,
     QLabel,
+    QLineEdit,
+    QListView,
     QMessageBox,
     QPushButton,
+    QSpinBox,
+    QSplitter,
     QTableWidget,
     QTableWidgetItem,
     QTextBrowser,
+    QTreeWidget,
+    QTreeWidgetItem,
     QVBoxLayout,
     QWidget,
 )
 
-from . import roster
+from . import composition, roster
 from .data_loader import STATS, STAT_LABELS
 from .gui import BACKGROUND_IMAGE, VERDICT_STYLE, BackgroundWidget
 
@@ -32,6 +40,20 @@ def _pretty_stat_tokens(token: str) -> str:
     for key, label in STAT_LABELS.items():
         token = token.replace(key, label)
     return token
+
+
+class _RatingItem(QTableWidgetItem):
+    """Sorts by the underlying number, not the '9.9/10' label — otherwise
+    '10.0/10' would sort before '9.9/10' alphabetically."""
+
+    def __init__(self, rating: float):
+        super().__init__(f"{rating:.1f}/10")
+        self.rating = rating
+
+    def __lt__(self, other):
+        if isinstance(other, _RatingItem):
+            return self.rating < other.rating
+        return super().__lt__(other)
 
 
 class SlotTile(QFrame):
@@ -132,6 +154,24 @@ class RosterWindow(QDialog):
         layout.setContentsMargins(12, 12, 12, 12)
         layout.setSpacing(8)
 
+        campaign_row = QHBoxLayout()
+        campaign_row.addWidget(QLabel("Campaign:"))
+        self.campaign_combo = QComboBox()
+        self.campaign_combo.setView(QListView())
+        self.campaign_combo.setMinimumWidth(220)
+        self.campaign_combo.activated.connect(self._on_campaign_chosen)
+        campaign_row.addWidget(self.campaign_combo)
+        for label, slot in (
+            ("New...", self._on_new_campaign),
+            ("Rename...", self._on_rename_campaign),
+            ("Delete", self._on_delete_campaign),
+        ):
+            btn = QPushButton(label)
+            btn.clicked.connect(slot)
+            campaign_row.addWidget(btn)
+        campaign_row.addStretch()
+        layout.addLayout(campaign_row)
+
         self.empty_label = QLabel(EMPTY_MESSAGE)
         self.empty_label.setAlignment(Qt.AlignCenter)
         self.empty_label.setStyleSheet("color: #b0bec5; font-style: italic; padding: 14px;")
@@ -166,13 +206,33 @@ class RosterWindow(QDialog):
         self.table.setColumnWidth(0, 180)
         self.table.setColumnWidth(1, 150)
         self.table.setColumnWidth(2, 260)
+        self.table.setSortingEnabled(True)
+        self.table.horizontalHeader().setSortIndicatorShown(True)
         self.table.itemSelectionChanged.connect(self._on_selection_changed)
-        layout.addWidget(self.table, stretch=1)
 
         self.detail = QTextBrowser()
-        self.detail.setMinimumHeight(180)
+        self.detail.setMinimumHeight(120)
         self.detail.setPlaceholderText("Select a brother to see his projected stats and target build.")
-        layout.addWidget(self.detail)
+
+        # Splitter so BOTH the list and the lower panels grow when the window is
+        # resized (the detail was previously fixed-height), and so the dividers
+        # can be dragged to favour whichever part you're reading.
+        bottom = QSplitter(Qt.Horizontal)
+        bottom.addWidget(self.detail)
+        bottom.addWidget(self._build_composition_panel())
+        bottom.setStretchFactor(0, 3)
+        bottom.setStretchFactor(1, 2)
+        bottom.setChildrenCollapsible(False)
+        bottom.setSizes([520, 360])
+
+        split = QSplitter(Qt.Vertical)
+        split.addWidget(self.table)
+        split.addWidget(bottom)
+        split.setStretchFactor(0, 3)
+        split.setStretchFactor(1, 2)
+        split.setChildrenCollapsible(False)
+        split.setSizes([280, 260])
+        layout.addWidget(split, stretch=1)
 
         button_row = QHBoxLayout()
         self.remove_btn = QPushButton("Remove from Roster")
@@ -187,43 +247,248 @@ class RosterWindow(QDialog):
 
         self.refresh()
 
-    def refresh(self):
-        self._entries = roster.ensure_positions(roster.load_roster())
-        self.empty_label.setVisible(not self._entries)
+    def _reload_campaigns(self):
+        self.campaign_combo.blockSignals(True)
+        self.campaign_combo.clear()
+        self.campaign_combo.addItems(roster.list_campaigns())
+        idx = self.campaign_combo.findText(roster.active_campaign())
+        if idx >= 0:
+            self.campaign_combo.setCurrentIndex(idx)
+        self.campaign_combo.blockSignals(False)
 
-        by_slot = {e.get("position"): e for e in self._entries}
-        for slot, tile in enumerate(self.tiles):
-            entry = by_slot.get(slot)
-            tile.set_entry(entry)
-            tile.set_selected(
-                self._selected_id is not None and entry is not None and entry["id"] == self._selected_id
+    def _switch_campaign(self, name):
+        roster.set_active_campaign(name)
+        self._selected_id = None  # a brother from the old campaign isn't in this one
+        self.refresh()
+
+    def _on_campaign_chosen(self, _index):
+        self._switch_campaign(self.campaign_combo.currentText())
+
+    def _on_new_campaign(self):
+        name, ok = QInputDialog.getText(self, "New Campaign", "Name this campaign:")
+        if not ok:
+            return
+        if not roster.create_campaign(name):
+            QMessageBox.warning(
+                self, "Can't Create", "Give it a name that isn't blank or already used."
             )
+            return
+        self._selected_id = None
+        self.refresh()
 
-        self.table.setRowCount(len(self._entries))
-        for row, entry in enumerate(self._entries):
-            self.table.setItem(row, 0, QTableWidgetItem(entry.get("name", "?")))
-            self.table.setItem(row, 1, QTableWidgetItem(entry.get("background", "?")))
-            self.table.setItem(row, 2, QTableWidgetItem(entry.get("archetype", "-")))
+    def _on_rename_campaign(self):
+        current = roster.active_campaign()
+        name, ok = QInputDialog.getText(self, "Rename Campaign", "New name:", text=current)
+        if not ok:
+            return
+        if not roster.rename_campaign(current, name):
+            QMessageBox.warning(
+                self, "Can't Rename", "Give it a name that isn't blank or already used."
+            )
+            return
+        self.refresh()
 
-            rating_item = QTableWidgetItem(f"{entry.get('rating', 0):.1f}/10")
-            rating_item.setTextAlignment(Qt.AlignCenter)
-            verdict = entry.get("verdict")
-            if verdict in VERDICT_STYLE:
-                rating_item.setForeground(Qt.white)
-                rating_item.setBackground(QColor(VERDICT_STYLE[verdict][1]))
-            self.table.setItem(row, 3, rating_item)
+    def _on_delete_campaign(self):
+        current = roster.active_campaign()
+        count = len(roster.load_roster())
+        confirm = QMessageBox.question(
+            self,
+            "Delete Campaign",
+            f"Delete the campaign '{current}' and its {count} brother(s)?\n\nThis cannot be undone.",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if confirm != QMessageBox.Yes:
+            return
+        if not roster.delete_campaign(current):
+            QMessageBox.information(
+                self, "Can't Delete", "This is your only campaign, so it can't be deleted."
+            )
+            return
+        self._selected_id = None
+        self.refresh()
 
-        # Restore the table selection to whoever is selected on the grid.
+    def _build_composition_panel(self):
+        panel = QWidget()
+        layout = QVBoxLayout(panel)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(4)
+
+        header = QHBoxLayout()
+        header.addWidget(QLabel("Composition:"))
+        self.preset_combo = QComboBox()
+        self.preset_combo.setView(QListView())  # see gui.py: private view eats the highlight
+        self.preset_combo.currentIndexChanged.connect(lambda _: self._update_composition())
+        header.addWidget(self.preset_combo, stretch=1)
+        layout.addLayout(header)
+
+        self.preset_note = QLabel()
+        self.preset_note.setWordWrap(True)
+        self.preset_note.setStyleSheet("color: #90a4ae; font-size: 11px;")
+        layout.addWidget(self.preset_note)
+
+        self.comp_tree = QTreeWidget()
+        self.comp_tree.setColumnCount(2)
+        self.comp_tree.setHeaderLabels(["Role / Build", "Have vs Target"])
+        self.comp_tree.setRootIsDecorated(True)
+        self.comp_tree.setEditTriggers(QTreeWidget.NoEditTriggers)
+        self.comp_tree.setColumnWidth(0, 210)
+        layout.addWidget(self.comp_tree, stretch=1)
+
+        customise_btn = QPushButton("Customise Targets...")
+        customise_btn.clicked.connect(self._on_customise_targets)
+        layout.addWidget(customise_btn)
+
+        self._reload_presets()
+        return panel
+
+    def _reload_presets(self, select_name=None):
+        self._roles, self._presets = composition.all_presets()
+        self.preset_combo.blockSignals(True)
+        self.preset_combo.clear()
+        self.preset_combo.addItems([p["name"] for p in self._presets])
+        if select_name:
+            idx = self.preset_combo.findText(select_name)
+            if idx >= 0:
+                self.preset_combo.setCurrentIndex(idx)
+        self.preset_combo.blockSignals(False)
+
+    def _current_preset(self):
+        idx = self.preset_combo.currentIndex()
+        return self._presets[idx] if 0 <= idx < len(self._presets) else None
+
+    def _update_composition(self):
+        preset = self._current_preset()
+        if preset is None:
+            return
+        self.preset_note.setText(preset.get("note", ""))
+        result = composition.compare(self._entries, self._roles, preset["targets"])
+
+        self.comp_tree.clear()
+        for role in result["roles"]:
+            delta = role["delta"]
+            if delta == 0:
+                status, colour = "on target", "#2e7d32"
+            elif delta > 0:
+                status, colour = f"over by {delta}", "#f9a825"
+            else:
+                status, colour = f"need {-delta} more", "#c62828"
+
+            node = QTreeWidgetItem([role["label"], f"{role['have']} / {role['target']}  ·  {status}"])
+            node.setForeground(1, QColor(colour))
+            for build in role["breakdown"]:
+                child = QTreeWidgetItem([f"   {build['archetype']}", str(build["count"])])
+                child.setForeground(0, QColor("#b0bec5"))
+                node.addChild(child)
+            self.comp_tree.addTopLevelItem(node)
+            node.setExpanded(True)
+
+        if result["unassigned"]:
+            orphan = QTreeWidgetItem(
+                ["Unassigned", f"{result['unassigned']} (archetype not in any role)"]
+            )
+            orphan.setForeground(1, QColor("#f9a825"))
+            self.comp_tree.addTopLevelItem(orphan)
+
+    def _on_customise_targets(self):
+        preset = self._current_preset()
+        if preset is None:
+            return
+
+        dialog = QDialog(self)
+        dialog.setWindowTitle("Customise Composition")
+        form = QGridLayout(dialog)
+
+        form.addWidget(QLabel("Save as:"), 0, 0)
+        name_edit = QLineEdit(preset["name"] if preset.get("custom") else f"{preset['name']} (mine)")
+        form.addWidget(name_edit, 0, 1)
+
+        spins = {}
+        for row, role in enumerate(self._roles, start=1):
+            form.addWidget(QLabel(role["label"]), row, 0)
+            spin = QSpinBox()
+            spin.setRange(0, 30)
+            spin.setValue(int(preset["targets"].get(role["key"], 0)))
+            form.addWidget(spin, row, 1)
+            spins[role["key"]] = spin
+
+        buttons = QHBoxLayout()
+        buttons.addStretch()
+        cancel = QPushButton("Cancel")
+        cancel.clicked.connect(dialog.reject)
+        buttons.addWidget(cancel)
+        save = QPushButton("Save")
+        save.setDefault(True)
+        save.clicked.connect(dialog.accept)
+        buttons.addWidget(save)
+        form.addLayout(buttons, len(self._roles) + 1, 0, 1, 2)
+
+        if dialog.exec_() != QDialog.Accepted:
+            return
+        name = name_edit.text().strip()
+        if not name:
+            QMessageBox.warning(self, "Name Needed", "Give the composition a name so you can pick it later.")
+            return
+        composition.save_custom_preset(name, {k: s.value() for k, s in spins.items()})
+        self._reload_presets(select_name=name)
+        self._update_composition()
+
+    def refresh(self):
+        # The whole rebuild must be guarded, not just the selection restore:
+        # shrinking the table destroys the selected row, which emits
+        # itemSelectionChanged mid-mutation. Unguarded that re-enters refresh()
+        # while the table is half-rebuilt, corrupting Qt's heap and hard-crashing
+        # on Windows (0xc0000374) — e.g. when removing the selected brother.
         self._syncing = True
-        self.table.clearSelection()
-        if self._selected_id is not None:
+        try:
+            self._reload_campaigns()
+            self._entries = roster.ensure_positions(roster.load_roster())
+            self.empty_label.setVisible(not self._entries)
+
+            by_slot = {e.get("position"): e for e in self._entries}
+            for slot, tile in enumerate(self.tiles):
+                entry = by_slot.get(slot)
+                tile.set_entry(entry)
+                tile.set_selected(
+                    self._selected_id is not None
+                    and entry is not None
+                    and entry["id"] == self._selected_id
+                )
+
+            # Sorting must be off while populating, or Qt re-sorts mid-insert and
+            # scrambles which cell lands in which row.
+            self.table.setSortingEnabled(False)
+            self.table.setRowCount(len(self._entries))
             for row, entry in enumerate(self._entries):
-                if entry["id"] == self._selected_id:
-                    self.table.selectRow(row)
-                    break
-        self._syncing = False
+                name_item = QTableWidgetItem(entry.get("name", "?"))
+                # Row order changes when the user sorts, so every lookup keys off
+                # this id rather than the row index.
+                name_item.setData(Qt.UserRole, entry["id"])
+                self.table.setItem(row, 0, name_item)
+                self.table.setItem(row, 1, QTableWidgetItem(entry.get("background", "?")))
+                self.table.setItem(row, 2, QTableWidgetItem(entry.get("archetype", "-")))
+
+                rating_item = _RatingItem(entry.get("rating", 0))
+                rating_item.setTextAlignment(Qt.AlignCenter)
+                verdict = entry.get("verdict")
+                if verdict in VERDICT_STYLE:
+                    rating_item.setForeground(Qt.white)
+                    rating_item.setBackground(QColor(VERDICT_STYLE[verdict][1]))
+                self.table.setItem(row, 3, rating_item)
+            self.table.setSortingEnabled(True)
+
+            # Restore the table selection to whoever is selected on the grid.
+            self.table.clearSelection()
+            if self._selected_id is not None:
+                for row in range(self.table.rowCount()):
+                    if self.table.item(row, 0).data(Qt.UserRole) == self._selected_id:
+                        self.table.selectRow(row)
+                        break
+        finally:
+            self._syncing = False
 
         self._show_detail(self._selected_entry())
+        self._update_composition()
 
     def _selected_entry(self):
         if self._selected_id is None:
@@ -255,9 +520,13 @@ class RosterWindow(QDialog):
         if self._syncing:
             return
         items = self.table.selectedItems()
-        row = items[0].row() if items else None
-        entry = self._entries[row] if row is not None and 0 <= row < len(self._entries) else None
-        self._select(entry["id"] if entry else None)
+        if not items:
+            self._select(None)
+            return
+        # Read the id off the row rather than indexing self._entries by row
+        # number — the two diverge as soon as the user sorts a column.
+        brother_id = self.table.item(items[0].row(), 0).data(Qt.UserRole)
+        self._select(brother_id)
 
     def _show_detail(self, entry):
         self.remove_btn.setEnabled(entry is not None)

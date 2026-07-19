@@ -7,6 +7,7 @@ roster.ROSTER_PATH at a throwaway temp dir.
 Run with: python tests/test_roster.py
 """
 
+import json
 import shutil
 import sys
 import tempfile
@@ -16,9 +17,10 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from bbcompanion import roster
 
-_REAL_ROSTER_PATH = roster.ROSTER_PATH
+_REAL_ROSTER_PATH = roster.ROSTERS_PATH
 _TMP = Path(tempfile.mkdtemp(prefix="bbc_roster_test_"))
-roster.ROSTER_PATH = _TMP / "roster.json"
+roster.ROSTERS_PATH = _TMP / "rosters.json"
+roster.LEGACY_ROSTER_PATH = _TMP / "roster.json"
 
 SAMPLE = {
     "name": "Atiq Orcbane",
@@ -33,13 +35,27 @@ SAMPLE = {
 
 
 def _reset():
-    if roster.ROSTER_PATH.exists():
-        roster.ROSTER_PATH.unlink()
+    for path in (roster.ROSTERS_PATH, roster.LEGACY_ROSTER_PATH):
+        if path.exists():
+            path.unlink()
 
 
-def test_never_points_at_real_local_config():
-    assert roster.ROSTER_PATH != _REAL_ROSTER_PATH
-    assert "bbc_roster_test_" in str(roster.ROSTER_PATH)
+def test_writes_are_redirected_away_from_real_local_config():
+    """Guard checked BEFORE anything is written.
+
+    Two traps this avoids:
+      * asserting on the constant *we patched* is worthless — if the module
+        renames it, the patch silently no-ops and the suite eats the real
+        roster. So assert on the attribute the module actually reads.
+      * "write then check where it landed" is worse than useless: with a stale
+        patch the damage is already done by the time the assert fires.
+    """
+    assert _TMP in roster.ROSTERS_PATH.parents, (
+        f"roster.ROSTERS_PATH is {roster.ROSTERS_PATH}, not redirected into the "
+        "temp dir — refusing to touch real user data"
+    )
+    assert _TMP in roster.LEGACY_ROSTER_PATH.parents
+    assert roster.ROSTERS_PATH != _REAL_ROSTER_PATH
 
 
 def test_load_missing_returns_empty():
@@ -49,9 +65,63 @@ def test_load_missing_returns_empty():
 
 def test_load_corrupt_returns_empty():
     _reset()
-    roster.ROSTER_PATH.parent.mkdir(exist_ok=True)
-    roster.ROSTER_PATH.write_text("{not valid json", encoding="utf-8")
+    roster.ROSTERS_PATH.parent.mkdir(exist_ok=True)
+    roster.ROSTERS_PATH.write_text("{not valid json", encoding="utf-8")
     assert roster.load_roster() == []
+
+
+def test_legacy_roster_is_migrated_into_default_campaign():
+    """Upgrading must not lose a roster saved before campaigns existed."""
+    _reset()
+    roster.LEGACY_ROSTER_PATH.parent.mkdir(exist_ok=True)
+    roster.LEGACY_ROSTER_PATH.write_text(
+        json.dumps([{"id": "old1", "name": "Veteran", "position": 0}]), encoding="utf-8"
+    )
+    entries = roster.load_roster()
+    assert len(entries) == 1, "legacy roster should be carried over"
+    assert entries[0]["name"] == "Veteran"
+    assert roster.active_campaign() == roster.DEFAULT_CAMPAIGN
+
+
+def test_campaigns_are_isolated():
+    _reset()
+    roster.add_brother(dict(SAMPLE, name="In First"))
+    roster.create_campaign("Ironman")
+    assert roster.active_campaign() == "Ironman"
+    assert roster.load_roster() == [], "a new campaign starts empty"
+
+    roster.add_brother(dict(SAMPLE, name="In Second"))
+    assert [e["name"] for e in roster.load_roster()] == ["In Second"]
+
+    roster.set_active_campaign(roster.DEFAULT_CAMPAIGN)
+    assert [e["name"] for e in roster.load_roster()] == ["In First"], "first campaign untouched"
+
+
+def test_create_rejects_duplicate_and_blank():
+    _reset()
+    assert roster.create_campaign("Run A") is True
+    assert roster.create_campaign("Run A") is False, "duplicate name rejected"
+    assert roster.create_campaign("   ") is False, "blank name rejected"
+
+
+def test_rename_campaign_keeps_entries():
+    _reset()
+    roster.add_brother(dict(SAMPLE, name="Kept"))
+    assert roster.rename_campaign(roster.DEFAULT_CAMPAIGN, "Main Run") is True
+    assert roster.active_campaign() == "Main Run"
+    assert [e["name"] for e in roster.load_roster()] == ["Kept"]
+
+
+def test_delete_campaign_switches_and_protects_last():
+    _reset()
+    roster.create_campaign("Doomed")
+    roster.add_brother(dict(SAMPLE, name="Gone"))
+    assert roster.delete_campaign("Doomed") is True
+    assert roster.active_campaign() != "Doomed", "active must move off a deleted campaign"
+
+    only = roster.list_campaigns()
+    assert len(only) == 1
+    assert roster.delete_campaign(only[0]) is False, "refuse to delete the last campaign"
 
 
 def test_add_and_roundtrip():

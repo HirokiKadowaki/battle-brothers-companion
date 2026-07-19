@@ -1,7 +1,7 @@
 """End-to-end drive of the roster flow through the real GUI:
 evaluate -> Add to Roster dialog -> Roster window -> remove.
 
-Points roster.ROSTER_PATH at a temp dir so the user's real roster is untouched.
+Redirects the roster store to a temp dir so the user's real roster is untouched.
 """
 
 import shutil
@@ -22,8 +22,20 @@ from bbcompanion.gui import DARK_STYLESHEET, RecruitWindow, build_dark_palette
 from bbcompanion.roster_window import RosterWindow
 
 _TMP = Path(tempfile.mkdtemp(prefix="bbc_roster_drive_"))
-roster.ROSTER_PATH = _TMP / "roster.json"
-assert "bbc_roster_drive_" in str(roster.ROSTER_PATH), "refusing to run against the real roster"
+roster.ROSTERS_PATH = _TMP / "rosters.json"
+roster.LEGACY_ROSTER_PATH = _TMP / "roster.json"
+
+# Guard BEFORE writing anything, and assert on the attributes the module itself
+# reads. Patching a constant the module no longer uses silently no-ops, and a
+# "write then check" guard would already have eaten the real roster by the time
+# it fired — both of which happened during development.
+for _attr in ("ROSTERS_PATH", "LEGACY_ROSTER_PATH"):
+    _path = getattr(roster, _attr)
+    if _TMP not in _path.parents:
+        raise SystemExit(
+            f"ABORT: roster.{_attr} is {_path}, not redirected into the temp dir. "
+            "Refusing to run against real user data."
+        )
 
 app.setStyle("Fusion")
 app.setPalette(build_dark_palette())
@@ -130,13 +142,45 @@ by_name = {x["name"]: x["position"] for x in roster.load_roster()}
 print("after swap ->", by_name)
 print(f"  Hans took slot 11: {by_name['Hans'] == 11} | Atiq swapped back to {hans_slot}: {by_name['Atiq Orcbane'] == hans_slot}")
 
-# Remove via the data layer, then confirm the window refreshes to the empty state
+# Regression: removing the *selected* brother used to re-enter refresh() while
+# the table was mid-rebuild and hard-crash Qt (0xc0000374). Drive the real
+# button path with the confirmation auto-accepted.
+print("\n--- remove selected brother (crash regression) ---")
+from PyQt5.QtWidgets import QMessageBox
+
+QMessageBox.question = staticmethod(lambda *a, **k: QMessageBox.Yes)
+
+remaining = roster.load_roster()
+rw._select(remaining[0]["id"])
+app.processEvents()
+print("selected before remove:", rw._selected_id is not None)
+rw._on_remove()          # would crash before the fix
+app.processEvents()
+print("survived removing selected brother:", True)
+print("rows now:", rw.table.rowCount(), "| selection cleared:", rw._selected_id is None)
+
+# The original crash: entries removed underneath a populated, selected table,
+# then a single refresh() shrinking it. Heap corruption is nondeterministic, so
+# this is a smoke test — the real guarantee is the _syncing guard in refresh().
+rw._select(None)
+roster.add_brother({"name": "Doomed A", "background": "Militia", "archetype": "Archer",
+                    "verdict": "poor", "rating": 3.0, "current_stats": {}, "stars": {}, "projected": {}})
+roster.add_brother({"name": "Doomed B", "background": "Militia", "archetype": "Archer",
+                    "verdict": "poor", "rating": 3.0, "current_stats": {}, "stars": {}, "projected": {}})
+rw.refresh()
+rw.table.selectRow(0)
+app.processEvents()
 for x in roster.load_roster():
     roster.remove_brother(x["id"])
-rw._selected_id = None
-rw.refresh()
+rw.refresh()             # 2 populated+selected rows -> 0, the original crash path
 app.processEvents()
-print("\n--- after remove ---")
+print("survived bulk removal + shrink refresh:", True)
+
+for x in roster.load_roster():
+    rw._select(x["id"])
+    rw._on_remove()
+    app.processEvents()
+print("\n--- after removing everyone ---")
 print("rows:", rw.table.rowCount(), "| empty label visible:", rw.empty_label.isVisible())
 print("all tiles empty:", all(t.entry is None for t in rw.tiles))
 

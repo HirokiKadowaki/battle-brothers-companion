@@ -47,3 +47,10 @@ def load_background_tips():
     """Recommended backgrounds grouped by campaign phase (early/mid/late)."""
     with open(DATA_DIR / "background_tips.json", encoding="utf-8") as f:
         return json.load(f)["phases"]
+
+
+def load_compositions():
+    """Role groups and target company compositions. Returns (roles, presets)."""
+    with open(DATA_DIR / "compositions.json", encoding="utf-8") as f:
+        data = json.load(f)
+    return data["roles"], data["presets"]

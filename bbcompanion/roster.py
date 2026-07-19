@@ -1,7 +1,10 @@
-"""Persistent roster of hired brothers.
+"""Persistent rosters of hired brothers, one per campaign.
 
-Pure data layer (no Qt) backed by local_config/roster.json — machine-local state
-alongside the screen calibration, not shipped game data.
+Pure data layer (no Qt) backed by local_config/rosters.json — machine-local
+state alongside the screen calibration, not shipped game data.
+
+Campaigns live in a single store keyed by name rather than one file each, so a
+campaign can be called anything without sanitising it into a filename.
 """
 
 import json
@@ -10,7 +13,10 @@ from datetime import date
 
 from .data_loader import LOCAL_CONFIG_DIR
 
-ROSTER_PATH = LOCAL_CONFIG_DIR / "roster.json"
+ROSTERS_PATH = LOCAL_CONFIG_DIR / "rosters.json"
+# Pre-campaign single roster; migrated into the store on first load.
+LEGACY_ROSTER_PATH = LOCAL_CONFIG_DIR / "roster.json"
+DEFAULT_CAMPAIGN = "Default"
 
 # Battle formation grid, matching the game's formation screen.
 GRID_COLS = 9
@@ -18,22 +24,112 @@ GRID_ROWS = 3
 GRID_SLOTS = GRID_COLS * GRID_ROWS
 
 
-def load_roster() -> list:
-    """Return the saved brothers, or [] if there is no (readable) roster yet."""
+def _empty_store() -> dict:
+    return {"active": DEFAULT_CAMPAIGN, "campaigns": {DEFAULT_CAMPAIGN: []}}
+
+
+def _load_store() -> dict:
     try:
-        with open(ROSTER_PATH, encoding="utf-8") as f:
+        with open(ROSTERS_PATH, encoding="utf-8") as f:
+            store = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        store = None
+
+    if not isinstance(store, dict) or not isinstance(store.get("campaigns"), dict):
+        store = _migrate_legacy() or _empty_store()
+
+    if not store["campaigns"]:
+        store["campaigns"][DEFAULT_CAMPAIGN] = []
+    if store.get("active") not in store["campaigns"]:
+        store["active"] = next(iter(store["campaigns"]))
+    return store
+
+
+def _migrate_legacy():
+    """Fold a pre-campaign local_config/roster.json into a Default campaign so
+    an existing roster isn't lost when upgrading."""
+    try:
+        with open(LEGACY_ROSTER_PATH, encoding="utf-8") as f:
             entries = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError, OSError):
-        # A missing roster is the normal first-run case; a corrupt one shouldn't
-        # take the app down — treat both as empty rather than raising.
-        return []
+        return None
+    if not isinstance(entries, list):
+        return None
+    store = {"active": DEFAULT_CAMPAIGN, "campaigns": {DEFAULT_CAMPAIGN: entries}}
+    _save_store(store)
+    return store
+
+
+def _save_store(store: dict) -> None:
+    ROSTERS_PATH.parent.mkdir(exist_ok=True)
+    with open(ROSTERS_PATH, "w", encoding="utf-8") as f:
+        json.dump(store, f, indent=2)
+
+
+def list_campaigns() -> list:
+    return sorted(_load_store()["campaigns"])
+
+
+def active_campaign() -> str:
+    return _load_store()["active"]
+
+
+def set_active_campaign(name: str) -> bool:
+    store = _load_store()
+    if name not in store["campaigns"]:
+        return False
+    store["active"] = name
+    _save_store(store)
+    return True
+
+
+def create_campaign(name: str) -> bool:
+    """Create an empty campaign and make it active. False if the name is taken."""
+    name = name.strip()
+    store = _load_store()
+    if not name or name in store["campaigns"]:
+        return False
+    store["campaigns"][name] = []
+    store["active"] = name
+    _save_store(store)
+    return True
+
+
+def rename_campaign(old: str, new: str) -> bool:
+    new = new.strip()
+    store = _load_store()
+    if old not in store["campaigns"] or not new or new in store["campaigns"]:
+        return False
+    store["campaigns"][new] = store["campaigns"].pop(old)
+    if store["active"] == old:
+        store["active"] = new
+    _save_store(store)
+    return True
+
+
+def delete_campaign(name: str) -> bool:
+    """Delete a campaign. Refuses to remove the last one so there's always a roster."""
+    store = _load_store()
+    if name not in store["campaigns"] or len(store["campaigns"]) <= 1:
+        return False
+    del store["campaigns"][name]
+    if store["active"] == name:
+        store["active"] = next(iter(store["campaigns"]))
+    _save_store(store)
+    return True
+
+
+def load_roster() -> list:
+    """Brothers in the active campaign ([] if none saved yet)."""
+    store = _load_store()
+    entries = store["campaigns"].get(store["active"], [])
     return entries if isinstance(entries, list) else []
 
 
 def save_roster(entries: list) -> None:
-    ROSTER_PATH.parent.mkdir(exist_ok=True)
-    with open(ROSTER_PATH, "w", encoding="utf-8") as f:
-        json.dump(entries, f, indent=2)
+    store = _load_store()
+    store["campaigns"][store["active"]] = entries
+    _save_store(store)
 
 
 def first_free_position(entries: list):
