@@ -1,5 +1,6 @@
 {
-  "_source": "Thresholds and build guidance paraphrased from WANG Chenhua's community guide (Builds and Company Composition, v1.4): https://steamcommunity.com/sharedfiles/filedetails/?id=1790093811 . Not copied verbatim. Requirement values are level-11 targets, compared directly against calculator projections.",
+  "_source": "Build guidance (level-up priority, perks, weapons, playstyle) is derived from the user's guide: docs/battle_brothers_guide_2026.md (its 'Build Templates' quick reference and the frontline/backline/late-game perk sections). The numeric requirement thresholds are UNCHANGED and still come from WANG Chenhua's community guide (https://steamcommunity.com/sharedfiles/filedetails/?id=1790093811) — the user's guide is prose and gives no level-11 numbers, and the calculator needs concrete targets to rate recruits.",
+  "_guidance_note": "The user's guide has 5 build templates. Shield/2H/Reach/Archer/Sergeant map directly; the 1H Battle-Forged and 1H Nimble-Dodge frontlines are the guide's one-hand/Duelist and Nimble+Dodge variants. Handgonne Man and Thrower are NOT dedicated builds in the guide and are ADAPTED from its ranged and throwing-weapon notes.",
   "_stat_key_legend": {
     "matk": "melee_skill",
     "ratk": "ranged_skill",
@@ -17,10 +18,10 @@
         { "stat": "resolve", "min": 45 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_defense", "fatigue", "melee_skill", "hp", "resolve"],
-        "key_perks": ["Recover", "Nimble or Battle Forged", "Weapon Mastery", "Shield Expert", "Colossus (early)", "Rotation", "Underdog", "Indomitable (dedicated tank)"],
-        "weapons": ["1H sword (Riposte)", "1H spear (Spearwall)", "1H hammer/mace + shield"],
-        "playstyle": "The cheapest, most forgiving frontline and the backbone of an early company. Hold the line, block/dodge melee and ranged, and use Rotation to rescue allies. Go Nimble if HP is better, Battle Forged if fatigue is better."
+        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
+        "key_perks": ["Colossus", "Battle Forged", "Shield Expert", "Steel Brow", "Rotation", "Footwork", "Brawny", "Fortified Mind", "Nine Lives"],
+        "weapons": ["Sword + shield (Shieldwall)", "Spear + shield (Spearwall vs chargers)", "Mace/Hammer + shield (stun / armor damage)"],
+        "playstyle": "The backbone of the line and early survival. Shields grant a big defense bonus plus Shieldwall; spearwall stops wolves and other chargers. Use Rotation to pull a hurt brother back and push a fresh one forward, and Footwork to disengage cleanly. Steel Brow and Nine Lives protect the investment."
       }
     },
     {
@@ -33,10 +34,10 @@
         { "stat": "resolve", "min": 45, "ideal": 55 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "melee_defense", "fatigue", "hp", "resolve", "ranged_defense (~10)"],
-        "key_perks": ["Student", "Recover", "Weapon Mastery", "Underdog", "Battle Forged", "Berserk", "Pathfinder", "Rotation", "Reach Advantage", "Killing Frenzy", "Brawny"],
-        "weapons": ["Greatsword (most versatile)", "2H Hammer (stagger)", "Bardiche/Greataxe (AOE)", "2H Cleaver (bleed)", "2H Mace (stun)"],
-        "playstyle": "Heaviest armor + strongest 2H weapon: the king of the battlefield, but very demanding to recruit/gear, so mid-late game only. Reach Advantage stacks mdef as it swings. Keep it alive — the recruit is precious."
+        "level_up_priority": ["melee_skill", "hp", "fatigue"],
+        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Fearsome", "Battle Forged", "Brawny", "Steel Brow", "Recover", "Nine Lives"],
+        "weapons": ["Greatsword (cleaves adjacent enemies)", "Greataxe", "Warhammer / Two-Handed Maul (smash armor, stun)"],
+        "playstyle": "Heavy plate (250+ body) so armor soaks HP damage; Brawny keeps fatigue workable. Swings behind or beside the shield line. Berserk chains action points on kills and Fearsome saps enemy morale. Needs good Fatigue to keep swinging."
       }
     },
     {
@@ -50,10 +51,10 @@
         { "stat": "ranged_defense", "min": 10 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "melee_defense", "fatigue", "hp", "resolve"],
-        "key_perks": ["Recover", "Weapon Mastery", "Underdog", "Battle Forged", "Berserk", "Duelist", "Pathfinder", "Rotation", "Killing Frenzy", "Anticipation (rdef)"],
-        "weapons": ["1H Cleaver (bleed, orc cleaver)", "1H Axe (head hits)", "1H Mace (armor-ignore)", "off-hand fire/flash pot"],
-        "playstyle": "Needs higher mdef than the 2H version (no Reach Advantage) but hits more often and deals strong armor-ignoring damage via Duelist. Free off-hand for fire/flash pots. Great single-target killer."
+        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
+        "key_perks": ["Colossus", "Battle Forged", "Duelist", "Killing Frenzy", "Berserk", "Brawny", "Steel Brow", "Recover", "Nine Lives"],
+        "weapons": ["1H cleaver / axe / mace (Duelist boosts one-hander damage)", "Off-hand free for a fire/flash pot, or a shield when pressed"],
+        "playstyle": "The one-hand + Duelist variant of the heavy frontline: fewer sweeping hits than a two-hander but strong armor-ignoring damage on a single target, with the free off-hand for a pot or a shield. Wants higher Melee Defense than the two-hander since it has no reach."
       }
     },
     {
@@ -67,10 +68,10 @@
         { "stat": "resolve", "min": 40 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "melee_defense", "initiative/hp", "fatigue", "ranged_defense (10+)"],
-        "key_perks": ["Student", "Recover", "Dodge", "Relentless", "Weapon Mastery", "Nimble", "Berserk", "Duelist", "Pathfinder", "Footwork", "Killing Frenzy"],
-        "weapons": ["Fencing sword (Lunge scales with initiative)", "Dagger (3-hit Overwhelm)"],
-        "playstyle": "High-initiative flanker: Dodge converts initiative into big mdef/rdef. Jump onto low-armor targets, kill in 1-2 hits, Footwork out of trouble. Tough vs armor-ignore damage, fragile to bleed/miasma."
+        "level_up_priority": ["melee_skill", "melee_defense", "initiative", "fatigue"],
+        "key_perks": ["Colossus", "Nimble", "Dodge", "Steel Brow", "Rotation", "Footwork", "Fortified Mind", "Killing Frenzy", "Nine Lives"],
+        "weapons": ["1H sword / cleaver + shield or free hand", "Light-but-not-flimsy armor"],
+        "playstyle": "The Nimble defensive identity: light armor means incoming HP damage is reduced, and high Initiative feeds Dodge for extra Melee/Ranged Defense. A mobile frontliner that takes fewer, smaller hits — Footwork to escape when it turns."
       }
     },
     {
@@ -84,10 +85,10 @@
         { "stat": "melee_skill", "min": 85, "optional": true, "note": "nice-to-have, not required" }
       ],
       "guidance": {
-        "level_up_priority": ["resolve", "melee_skill", "fatigue", "hp", "melee_defense/ranged_defense"],
-        "key_perks": ["Student", "Recover", "Pathfinder", "Fortified Mind", "Rally the Troops", "Nimble or Battle Forged", "Colossus", "Rotation", "Footwork", "Anticipation"],
-        "weapons": ["Battle Standard / banner polearm", "sergeant trinket"],
-        "playstyle": "Party morale anchor: Rally the Troops buffs group resolve and pulls panicking allies back. A Fearless background with 3-star Resolve talent is ideal. Survive, rally, assist — not a primary damage dealer."
+        "level_up_priority": ["resolve", "melee_defense", "fatigue", "hp"],
+        "key_perks": ["Fortified Mind", "Rally the Troops", "Colossus", "Battle Forged", "Rotation", "Shield Expert", "Steel Brow", "Footwork", "Nine Lives"],
+        "weapons": ["Banner (resolve aura to adjacent allies)", "Sword or spear + shield"],
+        "playstyle": "Stands IN the line, not behind it, carrying the Banner whose resolve aura steadies nearby brothers. Rally the Troops reverses a panic spiral. Worth a full slot in mid/late game — keep him alive and your line holds when it should break."
       }
     },
     {
@@ -101,10 +102,10 @@
         { "stat": "ranged_defense", "min": 10 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "hp/melee_defense/fatigue/ranged_defense", "resolve"],
-        "key_perks": ["Student", "Recover", "Weapon Mastery", "Battle Forged", "Berserk", "Brawny", "Pathfinder", "Rotation", "Backstabber", "Killing Frenzy"],
-        "weapons": ["Pike/Billhook (reach damage)", "Longaxe (HP/shield)", "Polehammer (armor)", "Warscythe"],
-        "playstyle": "Main backline damage from 2 tiles behind the frontline — mostly just needs high matk. Great home for 'failed 2H frontline' recruits. Battle Forged tanks ranged fire better; pairs with a spearwall line."
+        "level_up_priority": ["melee_skill", "fatigue", "melee_defense"],
+        "key_perks": ["Reach Advantage", "Colossus", "Fast Adaptation", "Backstabber", "Battle Forged", "Recover", "Berserk", "Killing Frenzy", "Steel Brow"],
+        "weapons": ["Billhook (pulls enemies out of formation)", "Pike / Spear (second-rank reach)", "Warscythe"],
+        "playstyle": "The classic backbone: attacks from the second rank over your shields, dealing damage while safe. Reach Advantage stacks Melee Defense the more it attacks, turning it into a second tank. Arguably the best value in the game."
       }
     },
     {
@@ -118,10 +119,10 @@
         { "stat": "ranged_defense", "min": 10 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "initiative", "hp/melee_defense", "fatigue", "resolve", "ranged_defense (10+)"],
-        "key_perks": ["Student", "Recover", "Weapon Mastery", "Nimble", "Berserk", "Dodge", "Relentless", "Overwhelm", "Pathfinder", "Rotation", "Killing Frenzy"],
-        "weapons": ["Warscythe / Swordlance (AOE spreads Overwhelm)", "Billhook"],
-        "playstyle": "The finest nimble backline: AOE reach damage that spreads Overwhelm to multiple enemies while keeping 25+ mdef and 15+ rdef via Dodge. High initiative + Relentless keeps Dodge strong all fight."
+        "level_up_priority": ["melee_skill", "initiative", "fatigue", "melee_defense"],
+        "key_perks": ["Reach Advantage", "Colossus", "Fast Adaptation", "Nimble", "Dodge", "Backstabber", "Recover", "Berserk", "Killing Frenzy"],
+        "weapons": ["Billhook", "Pike", "Warscythe (AOE)"],
+        "playstyle": "Same second-rank reach damage but on the Nimble identity: light armor plus Dodge, with high Initiative keeping Dodge strong all fight. Reach Advantage still makes it tanky, and it shrugs off armor-ignoring hits better than the Battle Forged version."
       }
     },
     {
@@ -134,10 +135,10 @@
         { "stat": "fatigue", "min": 100 }
       ],
       "guidance": {
-        "level_up_priority": ["ranged_skill", "initiative", "hp/ranged_defense", "fatigue"],
-        "key_perks": ["Student", "Nimble", "Bow Mastery", "Recover", "Berserk", "Bullseye", "Pathfinder", "Footwork", "Relentless", "Overwhelm", "Killing Frenzy", "Gifted"],
-        "weapons": ["War Bow", "Hunting Bow (early)"],
-        "playstyle": "The most important ranged type: longest range, 2-3 shots/turn. Hunter background is far and away best. Spread Overwhelm onto dangerous targets (enemy rangers, warlords) and burst down priority targets. Retreat once armor is stripped."
+        "level_up_priority": ["ranged_skill", "fatigue", "resolve"],
+        "key_perks": ["Bullseye", "Quick Hands", "Fast Adaptation", "Overwhelm", "Berserk", "Killing Frenzy", "Nimble", "Dodge", "Recover"],
+        "weapons": ["Warbow (damage)", "Hunting Bow (early)"],
+        "playstyle": "Deletes enemy shamans, marksmen, and low-armor priority targets before they matter. Bullseye ignores cover and obstruction penalties (mandatory); Quick Hands swaps to a melee weapon for free when lines close. Overwhelm lowers the accuracy of whatever it shoots."
       }
     },
     {
@@ -149,10 +150,10 @@
         { "stat": "fatigue", "min": 100 }
       ],
       "guidance": {
-        "level_up_priority": ["ranged_skill", "hp/ranged_defense", "fatigue"],
-        "key_perks": ["Student", "Nimble", "Crossbow Mastery", "Recover", "Berserk", "Bullseye", "Crippling Strikes", "Executioner", "Pathfinder", "Footwork", "Killing Frenzy"],
-        "weapons": ["Heavy Crossbow (+hit)", "Spiked Impaler (knockback)", "Handgonne (for line battles)"],
-        "playstyle": "Easier to hit at low ratk (good early-game transition to archer). Crossbow Mastery's armor-ignore synergizes with injury (Crippling Strikes + Executioner). Lower total damage/range than a bow, but strong armor penetration and knockback."
+        "level_up_priority": ["ranged_skill", "fatigue", "hp"],
+        "key_perks": ["Bullseye", "Quick Hands", "Fast Adaptation", "Overwhelm", "Berserk", "Killing Frenzy", "Nimble", "Recover"],
+        "weapons": ["Crossbow (armor penetration, no fatigue to aim)", "Heavy Crossbow"],
+        "playstyle": "Crossbows punch through armor and cost no fatigue to aim, making them strong against armored priority targets. Same supporting perks as the archer; Quick Hands to swap to melee when the enemy closes."
       }
     },
     {
@@ -166,10 +167,10 @@
         { "stat": "resolve", "min": 60, "optional": true, "note": "only for Fearsome builds" }
       ],
       "guidance": {
-        "level_up_priority": ["ranged_skill", "initiative", "hp/ranged_defense", "fatigue"],
-        "key_perks": ["Student", "Nimble", "Crossbow & Firearms Mastery", "Dodge", "Relentless", "Overwhelm", "Fearsome", "Anticipation", "Killing Frenzy"],
-        "weapons": ["Handgonne (hits up to 6 targets)", "Buckler off-hand"],
-        "playstyle": "Devastating AOE in line-to-line battles — hits up to 6 targets, ideal for spreading Overwhelm and Fearsome across a human army. Needs better rdef than other rangers (stands in second row). Weak vs elites and enemies that break formation."
+        "level_up_priority": ["ranged_skill", "fatigue", "hp"],
+        "key_perks": ["Bullseye", "Quick Hands", "Fast Adaptation", "Overwhelm", "Killing Frenzy", "Nimble", "Recover"],
+        "weapons": ["Handgonne (area damage, hits several targets in a line)", "Buckler off-hand"],
+        "playstyle": "Adapted (the source guide doesn't cover handgonnes as a dedicated build). An area-damage firearm for line-to-line battles that can spread Overwhelm across a packed enemy front. Stands in the second row, so it wants better Ranged Defense than a bowman."
       }
     },
     {
@@ -181,10 +182,10 @@
         { "stat": "fatigue", "min": 100 }
       ],
       "guidance": {
-        "level_up_priority": ["ranged_skill", "hp/ranged_defense", "fatigue"],
-        "key_perks": ["Student", "Nimble", "Throwing Mastery", "Recover", "Berserk", "Duelist", "Quick Hands", "Crippling Strikes", "Executioner", "Footwork", "Bags and Belts"],
-        "weapons": ["Barbarian throwing weapons (javelins/axes)", "backup crossbow"],
-        "playstyle": "Early-game friendly (hits well at low ratk thanks to close-range hit bonus). Barbarian throwing weapons deal ~1.5x a war bow's damage within 2-3 tiles. Duelist + injury perks make it a strong short-range bruiser; carry lots of ammo (Bags and Belts)."
+        "level_up_priority": ["ranged_skill", "fatigue", "hp"],
+        "key_perks": ["Quick Hands", "Fast Adaptation", "Overwhelm", "Berserk", "Killing Frenzy", "Nimble", "Recover", "Colossus"],
+        "weapons": ["Javelins / throwing axes (burst)", "Backup melee weapon"],
+        "playstyle": "Adapted (the source guide treats throwing weapons as burst utility rather than a dedicated build). Short-range burst damage; Quick Hands lets a frontliner or backliner throw a volley then swap back to a melee weapon when the enemy arrives."
       }
     }
   ]

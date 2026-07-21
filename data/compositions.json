@@ -1,6 +1,6 @@
 {
-  "_source": "Role split and the standard 12-man target are paraphrased from WANG Chenhua's community guide (Builds and Company Composition, v1.4): https://steamcommunity.com/sharedfiles/filedetails/?id=1790093811 . It describes a common 12-brother company as 6 frontline + 6 backline, where the backline consists of 2-3 tile melee (polearm) users, a sergeant, and ranged brothers (archer / crossbow / thrower). The spearwall figure comes from the same guide's note that a decent spearwall line usually needs about 4 brothers.",
-  "_note": "Targets are per ROLE, since the guide gives role-level guidance rather than exact per-archetype counts. The UI shows your actual archetype breakdown inside each role, so you can still spot e.g. too many shield users without the app inventing a precise target for each build.",
+  "_source": "Role split and target counts derived from the user's guide: docs/battle_brothers_guide_2026.md. It frames a 12-man company as roughly 6 frontline + 6 backline, and in 'Building specialists' gives per-role counts: frontline shield tanks 2-4, two-handed damage 2-3, polearm/reach line 2-3, archers/ranged 1-3, and one banner/sergeant.",
+  "_note": "Targets are per ROLE, since the guide gives role-level counts rather than a target for each specific build. The UI shows your actual archetype breakdown inside each role, so you can still spot e.g. too many shield users. The guide's frontline (shield tanks + two-handers) maps onto the 'frontline' role group here; its polearm/reach line maps onto 'backline_melee'.",
   "roles": [
     {
       "key": "frontline",
@@ -39,22 +39,22 @@
   "presets": [
     {
       "name": "Standard 12 (6 front / 6 back)",
-      "note": "The guide's common company: 6 frontline and 6 backline, the backline being polearms, a sergeant and ranged brothers.",
+      "note": "The guide's common company: ~6 frontline (a mix of shield tanks and two-handers) and 6 backline made of a polearm/reach line, ranged, and a banner sergeant.",
       "targets": { "frontline": 6, "backline_melee": 3, "ranged": 2, "support": 1 }
     },
     {
-      "name": "Spearwall + Polearm (12)",
-      "note": "Built around a spearwall line (~4 shield/spear brothers) with polearms striking over the top — the guide calls this a classic answer to most opponents, including Chosen.",
+      "name": "Shield-and-reach wall (12)",
+      "note": "Leans on the guide's most-defensive picks: a fuller shield frontline with a strong polearm/reach line striking over the top. Fewer two-handers, safer against orcs and cavalry.",
       "targets": { "frontline": 5, "backline_melee": 4, "ranged": 2, "support": 1 }
     },
     {
       "name": "Ranged-heavy (12)",
-      "note": "Leans on archers and crossbows to thin enemies before contact; needs a solid frontline to hold while they fire.",
+      "note": "Toward the top of the guide's ranged range (archers/ranged up to 3): thin enemies before contact, backed by a solid frontline to hold while they fire.",
       "targets": { "frontline": 6, "backline_melee": 1, "ranged": 4, "support": 1 }
     },
     {
       "name": "Early company (8)",
-      "note": "A smaller early-game band: mostly cheap frontline bodies with a couple of ranged, before you can afford specialists.",
+      "note": "A smaller early-game band before you can afford specialists: mostly cheap frontline bodies with a couple of ranged, no dedicated banner yet.",
       "targets": { "frontline": 5, "backline_melee": 1, "ranged": 2, "support": 0 }
     }
   ]

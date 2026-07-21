@@ -3,3 +3,5 @@ __pycache__/
 .venv/
 venv/
 local_config/
+# Personal guide the data files are derived from; kept local, not shipped.
+docs/battle_brothers_guide_2026.md

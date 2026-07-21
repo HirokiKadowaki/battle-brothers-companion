@@ -1,55 +1,47 @@
 {
-  "_source": "Paraphrased from community tier lists, not copied verbatim: Raider King's background tier list (https://raiderking.com/battle-brothers-best-backgrounds-tier-list/) for overall S/A/B power ranking, and GamersDecide's Top 10 Backgrounds (https://www.gamersdecide.com/articles/battle-brothers-best-backgrounds) for the game-phase framing ('ideal early game', 'mid-game hires', 'mid-to-late game recruits'). Cross-checked against the base_wage / starting_level values in backgrounds.json, which line up with the phases (early picks ~5-13/day, mid ~14-25, late ~35).",
-  "_note": "A background can appear in more than one phase. Names must match the keys in backgrounds.json exactly.",
+  "_source": "Derived from the user's guide: docs/battle_brothers_guide_2026.md ('EARLY GAME > Who to recruit early', and the recruiting notes in the One-Page Cheat Sheet). The guide frames recruiting around cheap early bodies vs. premium later hires and stresses 'stars > current stats' for the long haul. Names are cross-checked to exist in backgrounds.json.",
+  "_note": "The guide is early-game-focused on recruiting, so the mid/late lists reflect its 'premium hire' guidance (Adventurous Noble, Hedge Knight, Sellsword, Retired Soldier, Squire). A background can appear in more than one phase. Cripple/Beggar are omitted: the guide calls them emergency fatigue-fodder only, not recommended picks.",
   "phases": [
     {
       "key": "early",
       "label": "Early game",
-      "hint": "Cheap bodies with low wages - hire several and keep the good rolls.",
+      "hint": "Cheap bodies to fill 12 slots; hire lots, keep the ones with good stars.",
       "backgrounds": [
         "Militia",
         "Brawler",
-        "Farmhand",
-        "Fisherman",
-        "Butcher",
-        "Shepherd",
-        "Poacher",
-        "Monk",
         "Thief",
-        "Wildman"
+        "Poacher",
+        "Hunter",
+        "Wildman",
+        "Raider",
+        "Barbarian",
+        "Caravan Hand"
       ]
     },
     {
       "key": "mid",
       "label": "Mid game",
-      "hint": "Better base stats for a moderate wage, once you can afford a miss.",
+      "hint": "Once the company is structured you can afford better base stats and wages.",
       "backgrounds": [
-        "Militia",
-        "Bastard",
-        "Disowned Noble",
+        "Retired Soldier",
         "Adventurous Noble",
         "Squire",
-        "Beast Slayer",
-        "Retired Soldier",
-        "Oathtaker",
-        "Witchhunter",
-        "Hunter"
+        "Sellsword",
+        "Hunter",
+        "Wildman",
+        "Raider"
       ]
     },
     {
       "key": "late",
       "label": "Late game",
-      "hint": "Premium hires worth the high wage - strong enough to slot straight in.",
+      "hint": "Premium hires worth the high wage - strong enough to slot straight into an elite line.",
       "backgrounds": [
         "Hedge Knight",
         "Sellsword",
-        "Swordmaster",
-        "Gladiator",
         "Adventurous Noble",
-        "Wildman",
-        "Witchhunter",
         "Retired Soldier",
-        "Hunter"
+        "Wildman"
       ]
     }
   ]
