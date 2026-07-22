@@ -51,6 +51,18 @@ def test_archetype_guidance_present():
             assert guidance.get(key), f"{archetype['name']} guidance missing {key}"
 
 
+def test_archetype_guidance_backgrounds_exist():
+    """Where an archetype recommends 'best backgrounds', they must be real
+    backgrounds — otherwise a typo silently shows a bogus recommendation."""
+    known = set(load_backgrounds())
+    for archetype in load_archetypes():
+        for name in archetype.get("guidance", {}).get("backgrounds", []):
+            assert name in known, (
+                f"{archetype['name']} recommends background {name!r}, "
+                f"which is not in backgrounds.json"
+            )
+
+
 def main():
     tests = [v for k, v in globals().items() if k.startswith("test_") and callable(v)]
     failures = []

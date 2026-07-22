@@ -561,10 +561,17 @@ class RosterWindow(QDialog):
             priorities = " &rarr; ".join(
                 _pretty_stat_tokens(t) for t in guidance.get("level_up_priority", [])
             )
+            backgrounds = guidance.get("backgrounds")
+            backgrounds_html = (
+                f'<p style="margin:2px 0;"><b>Best backgrounds:</b> {", ".join(backgrounds)}</p>'
+                if backgrounds
+                else ""
+            )
             guidance_html = (
                 f'<p style="margin:6px 0 2px 0;"><b>Level-up priority:</b> {priorities}</p>'
                 f'<p style="margin:2px 0;"><b>Key perks:</b> {", ".join(guidance.get("key_perks", []))}</p>'
                 f'<p style="margin:2px 0;"><b>Weapons / gear:</b> {", ".join(guidance.get("weapons", []))}</p>'
+                f"{backgrounds_html}"
             )
 
         verdict_label = VERDICT_STYLE.get(entry.get("verdict"), ("", ""))[0]

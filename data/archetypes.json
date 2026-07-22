@@ -198,10 +198,11 @@
         { "stat": "fatigue", "min": 130 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
-        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Battle Forged", "Brawny", "Steel Brow", "Fearsome", "Recover", "Nine Lives"],
-        "weapons": ["2H Rusty Axe (barbarian - cleave + bleed)", "2H Mace (stun / daze)"],
-        "playstyle": "The bulk of the heavy-2H line. The rusty (barbarian) two-handed axe cleaves and bleeds; the two-handed mace stuns and dazes. Battle Forged + heavy plate to tank, Brawny to keep fatigue workable while swinging every turn."
+        "level_up_priority": ["melee_skill", "melee_defense", "fatigue", "hp", "resolve"],
+        "key_perks": ["Student", "Colossus", "Gifted", "Brawny", "Weapon Mastery (Mace or Axe)", "Underdog", "Battle Forged", "Berserk", "Killing Frenzy", "Recover", "Pathfinder"],
+        "backgrounds": ["Hedge Knight", "Sellsword", "Wildman", "Farmhand", "Brawler"],
+        "weapons": ["2H Rusty Axe (armor strip / raw DPS)", "2H Mace (daze / lock down threats like Chosen)"],
+        "playstyle": "Front-row center line-holder and single-target damage. Maces daze and stagger dangerous enemies (Chosen) so they can't counterattack; axes strip armor and shred lightly-armored targets. Swap mace vs axe to match the enemy composition you're facing."
       }
     },
     {
@@ -213,10 +214,11 @@
         { "stat": "fatigue", "min": 135 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
-        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Battle Forged", "Brawny", "Steel Brow", "Fearsome", "Recover", "Nine Lives"],
-        "weapons": ["2H Great Hammer (armor smash + knockback)"],
-        "playstyle": "Top-skill armor breaker (90+ melee skill). Flanks to smash the most heavily armored enemies and knock them out of formation, opening them for the rest of the line. Wants the highest melee skill and fatigue of the frontline."
+        "level_up_priority": ["melee_skill", "melee_defense", "fatigue"],
+        "key_perks": ["Student", "Colossus", "Gifted", "Brawny", "Hammer Mastery", "Underdog", "Reach Advantage", "Battle Forged", "Berserk", "Killing Frenzy", "Recover"],
+        "backgrounds": ["Hedge Knight", "Sellsword", "Squire", "Wildman", "Raider"],
+        "weapons": ["2H Great Hammer (3-tile Shatter sweep - breaks armor on the flanks)"],
+        "playstyle": "Deploy just inside the flank tanks (positions 2 and 11). Uses the 3-tile Shatter sweep to break incoming armor on the flanks before enemies can surround the core line. FAT 135+ is non-negotiable - heavy armor plus AoE swings drain fatigue fast."
       }
     },
     {
@@ -228,10 +230,11 @@
         { "stat": "fatigue", "min": 140 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_skill", "hp", "melee_defense", "fatigue"],
-        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Battle Forged", "Brawny", "Reach Advantage", "Steel Brow", "Recover", "Nine Lives"],
-        "weapons": ["2H Crypt Cleaver (bleed, hits twice)", "Disarm Whip (strip enemy weapons)"],
-        "playstyle": "Utility bruiser. The two-handed cleaver double-hits and stacks bleed; swap to the whip to disarm dangerous enemies (chosen, warlords). The highest fatigue demand (140) of the company because it weapon-swaps and swings twice a turn."
+        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
+        "key_perks": ["Student", "Colossus", "Gifted", "Quick Hands", "Cleaver Mastery", "Underdog", "Battle Forged", "Berserk", "Killing Frenzy", "Recover", "Pathfinder"],
+        "backgrounds": ["Sellsword", "Hedge Knight", "Raider", "Wildman"],
+        "weapons": ["2H Crypt Cleaver (two 4-AP swings/turn, bleed)", "Disarm Whip (disarm elites from 2 tiles)"],
+        "playstyle": "The most versatile brother, sitting frontline-middle. The cleaver attacks twice per turn at 4 AP each; use Quick Hands to pocket-swap to a whip and disarm Orc Warlords, Lindwurms, or Unholds from 2 tiles. High MSKL is mandatory - whip disarms miss high-defense targets without it. The double-swing rhythm makes it exceptionally AP-efficient."
       }
     },
     {
@@ -243,10 +246,11 @@
         { "stat": "resolve", "min": 60 }
       ],
       "guidance": {
-        "level_up_priority": ["melee_defense", "hp", "fatigue", "resolve"],
-        "key_perks": ["Colossus", "Battle Forged", "Shield Expert", "Steel Brow", "Rotation", "Footwork", "Fortified Mind", "Underdog", "Nine Lives"],
+        "level_up_priority": ["melee_defense", "resolve", "hp", "fatigue"],
+        "key_perks": ["Colossus", "Gifted", "Shield Expert", "Fortified Mind", "Underdog", "Battle Forged", "Indomitable", "Recover", "Taunt", "Brawny", "Pathfinder"],
+        "backgrounds": ["Thief", "Gladiator", "Peddler", "Caravan Hand", "Wildman"],
         "weapons": ["1H Spear (Spearwall, +hit chance)", "Heavy Shield (Kite / Heater)"],
-        "playstyle": "A pure defensive anchor with 45+ base melee defense before shield. Spearwall plus a heavy shield lets him hold a flank against several attackers at once; Riposte/Spearwall punishes them while Rotation keeps him fresh. Minimal offense by design - his job is to not die and not be flanked around."
+        "playstyle": "Pure utility, placed on the absolute far left and right of the frontline - deals no damage, exists to delay and lock down flankers, walling 3-4 enemies at once. Step out to catch flankers, drop Shieldwall, and spam Indomitable to shrug off stuns and displacement. Recruit these for the highest base Melee Defense rolls in the whole roster; Fortified Mind + 60+ base Resolve keeps them standing when surrounded."
       }
     },
     {
@@ -259,9 +263,10 @@
       ],
       "guidance": {
         "level_up_priority": ["resolve", "melee_skill", "hp", "fatigue"],
-        "key_perks": ["Fortified Mind", "Rally the Troops", "Colossus", "Battle Forged", "Rotation", "Steel Brow", "Footwork", "Nine Lives"],
-        "weapons": ["Company Banner (resolve aura)", "Billhook / Disarm Whip (second-rank reach utility)"],
-        "playstyle": "A very-high-resolve (100+) morale anchor that also contributes from the back with a billhook or whip. Rally the Troops reverses a panic spiral; the 75+ melee skill is enough to reliably break nets, free allies, and land reach hits."
+        "key_perks": ["Student", "Colossus", "Fortified Mind", "Rally the Troops", "Brawny", "Polearm Mastery", "Quick Hands", "Pathfinder", "Anticipation", "Gifted", "Underdog"],
+        "backgrounds": ["Monk", "Adventurous Noble", "Witchhunter", "Cultist"],
+        "weapons": ["Company Banner (resolve aura)", "Billhook / Whip (Quick Hands when morale is stable)"],
+        "playstyle": "The company's emotional anchor, back-row center. Keeps the team at Confident (+10% to all stats) and reverses Wavering/Breaking with Rally the Troops - spam it against Geists, Ancient Priests, and Alps. Swap to a billhook/whip with Quick Hands when morale is stable rather than wasting AP. The Sergeant Sash + Company Banner stack Resolve hard, so plan recruiting around hitting 100+ effective RES."
       }
     },
     {
@@ -273,10 +278,11 @@
         { "stat": "fatigue", "min": 120 }
       ],
       "guidance": {
-        "level_up_priority": ["ranged_skill", "melee_skill", "hp", "fatigue"],
-        "key_perks": ["Quick Hands", "Bullseye", "Fast Adaptation", "Overwhelm", "Berserk", "Killing Frenzy", "Nimble", "Recover"],
-        "weapons": ["Heavy Javelins / Throwing Axes (burst)", "Billhook (second-rank reach)"],
-        "playstyle": "A flexible backliner: opens with heavy throwing weapons, then uses Quick Hands to swap to a billhook and strike from the second rank once enemies close. Wants both strong ranged (90+) and decent melee (75+) skill to do either job well."
+        "level_up_priority": ["ranged_skill", "melee_skill", "fatigue", "hp", "initiative"],
+        "key_perks": ["Student", "Colossus", "Pathfinder", "Quick Hands", "Throwing Mastery", "Polearm Mastery", "Duelist", "Berserk", "Killing Frenzy", "Nimble", "Gifted"],
+        "backgrounds": ["Hunter", "Bowyer", "Sellsword", "Poacher"],
+        "weapons": ["Heavy Javelins / Throwing Axes (shred armor within 2 tiles)", "Billhook / Swordlance (Quick Hands when enemies close)"],
+        "playstyle": "The highest single-target DPS in the comp, second row on the flanks. Heavy throwing weapons inside 2 tiles completely dismantle armored targets from safely behind the tanks; Quick Hands swaps to a billhook or swordlance when enemies close the gap. Nimble is viable since these brothers are lightly armored - keep them out of the melee scrum when you can."
       }
     }
   ]

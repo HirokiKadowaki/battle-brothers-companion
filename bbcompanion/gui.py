@@ -536,12 +536,19 @@ class RecruitWindow(QMainWindow):
         priorities = " &rarr; ".join(pretty(t) for t in guidance["level_up_priority"])
         perks = ", ".join(guidance["key_perks"])
         weapons = ", ".join(guidance["weapons"])
+        backgrounds = guidance.get("backgrounds")
+        backgrounds_html = (
+            f'<p style="margin:2px 0;"><b>Best backgrounds:</b> {", ".join(backgrounds)}</p>'
+            if backgrounds
+            else ""
+        )
         self.archetype_detail.setHtml(
             f'<h3 style="margin:2px 0;">{name}</h3>'
             f'<p style="margin:2px 0;">{guidance["playstyle"]}</p>'
             f'<p style="margin:6px 0 2px 0;"><b>Level-up priority:</b> {priorities}</p>'
             f'<p style="margin:2px 0;"><b>Key perks:</b> {perks}</p>'
             f'<p style="margin:2px 0;"><b>Weapons / gear:</b> {weapons}</p>'
+            f"{backgrounds_html}"
         )
 
     def _qcolor(self, hex_color):
