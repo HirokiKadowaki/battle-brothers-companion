@@ -9,7 +9,11 @@
         "Shield User (Frontline Tank)",
         "Two-Handed Battle Forged Frontline",
         "One-Handed Battle Forged Frontline",
-        "One-Handed Nimble Dodge Frontline"
+        "One-Handed Nimble Dodge Frontline",
+        "2H Mace / 2H Axe Frontliner",
+        "2H Hammer Flanker",
+        "2H Cleaver / Whip Utility",
+        "Dedicated Flank Tank"
       ]
     },
     {
@@ -27,13 +31,14 @@
         "Archer",
         "Crossbow Man",
         "Handgonne Man",
-        "Thrower"
+        "Thrower",
+        "Thrower / Polearm Hybrid"
       ]
     },
     {
       "key": "support",
       "label": "Support",
-      "archetypes": ["Sergeant"]
+      "archetypes": ["Sergeant", "Backline Sergeant"]
     }
   ],
   "presets": [
@@ -56,6 +61,19 @@
       "name": "Early company (8)",
       "note": "A smaller early-game band before you can afford specialists: mostly cheap frontline bodies with a couple of ranged, no dedicated banner yet.",
       "targets": { "frontline": 5, "backline_melee": 1, "ranged": 2, "support": 0 }
+    },
+    {
+      "name": "Heavy 2H Doomstack (12)",
+      "note": "The user's specific heavy-2H company plan. Table counts (using a single number within each range): 3 mace/axe frontliners, 2 hammer flankers, 1 cleaver/whip, 2 flank tanks, 1 backline sergeant, 3 thrower/polearm hybrids. Per-archetype targets are shown under each role.",
+      "targets": { "frontline": 8, "backline_melee": 0, "ranged": 3, "support": 1 },
+      "archetype_targets": {
+        "2H Mace / 2H Axe Frontliner": 3,
+        "2H Hammer Flanker": 2,
+        "2H Cleaver / Whip Utility": 1,
+        "Dedicated Flank Tank": 2,
+        "Backline Sergeant": 1,
+        "Thrower / Polearm Hybrid": 3
+      }
     }
   ]
 }

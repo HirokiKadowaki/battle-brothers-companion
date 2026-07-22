@@ -55,6 +55,67 @@ def test_preset_targets_use_known_role_keys():
         assert not bad, f"preset {preset['name']!r} targets unknown roles: {bad}"
 
 
+def test_preset_archetype_targets_reference_known_archetypes():
+    """A per-archetype target naming a build that doesn't exist would silently
+    never show — catch typos/renames loudly."""
+    known = {a["name"] for a in load_archetypes()}
+    for preset in PRESETS:
+        for name in preset.get("archetype_targets", {}):
+            assert name in known, (
+                f"preset {preset['name']!r} targets unknown archetype {name!r}"
+            )
+
+
+def test_preset_archetype_targets_sum_into_role_targets():
+    """Where a preset gives both, the per-archetype targets should add up to the
+    role totals, so the two views agree."""
+    role_of = {a: r["key"] for r in ROLES for a in r["archetypes"]}
+    for preset in PRESETS:
+        at = preset.get("archetype_targets")
+        if not at:
+            continue
+        summed = {}
+        for archetype, n in at.items():
+            summed[role_of[archetype]] = summed.get(role_of[archetype], 0) + n
+        for key, total in summed.items():
+            assert preset["targets"].get(key, 0) == total, (
+                f"preset {preset['name']!r}: role '{key}' target "
+                f"{preset['targets'].get(key)} != sum of its archetypes {total}"
+            )
+
+
+def test_compare_with_archetype_targets():
+    entries = _brothers(
+        "2H Hammer Flanker",
+        "Dedicated Flank Tank",
+        "Dedicated Flank Tank",
+    )
+    archetype_targets = {"2H Hammer Flanker": 2, "Dedicated Flank Tank": 2, "2H Cleaver / Whip Utility": 1}
+    result = composition.compare(
+        entries, ROLES, {"frontline": 5}, archetype_targets
+    )
+    frontline = next(r for r in result["roles"] if r["key"] == "frontline")
+    rows = {b["archetype"]: b for b in frontline["breakdown"]}
+
+    assert rows["2H Hammer Flanker"]["count"] == 1
+    assert rows["2H Hammer Flanker"]["target"] == 2
+    assert rows["2H Hammer Flanker"]["delta"] == -1, "1 of 2 = need 1 more"
+    assert rows["Dedicated Flank Tank"]["delta"] == 0, "2 of 2 = on target"
+    # An archetype with a target but none hired must still appear, so the gap shows.
+    assert "2H Cleaver / Whip Utility" in rows
+    assert rows["2H Cleaver / Whip Utility"]["count"] == 0
+    assert rows["2H Cleaver / Whip Utility"]["delta"] == -1
+
+
+def test_compare_without_archetype_targets_unchanged():
+    """Presets without archetype_targets must behave exactly as before (breakdown
+    rows carry no target key, and zero-count archetypes are omitted)."""
+    result = composition.compare(_brothers("Archer"), ROLES, {"ranged": 2})
+    ranged = next(r for r in result["roles"] if r["key"] == "ranged")
+    assert all("target" not in b for b in ranged["breakdown"])
+    assert [b["archetype"] for b in ranged["breakdown"]] == ["Archer"]
+
+
 def test_compare_counts_and_deltas():
     entries = _brothers(
         "Shield User (Frontline Tank)",

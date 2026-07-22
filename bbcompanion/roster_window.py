@@ -357,27 +357,37 @@ class RosterWindow(QDialog):
         idx = self.preset_combo.currentIndex()
         return self._presets[idx] if 0 <= idx < len(self._presets) else None
 
+    @staticmethod
+    def _status_text_colour(have, target, delta):
+        if delta == 0:
+            return f"{have} / {target}  ·  on target", "#2e7d32"
+        if delta > 0:
+            return f"{have} / {target}  ·  over by {delta}", "#f9a825"
+        return f"{have} / {target}  ·  need {-delta} more", "#c62828"
+
     def _update_composition(self):
         preset = self._current_preset()
         if preset is None:
             return
         self.preset_note.setText(preset.get("note", ""))
-        result = composition.compare(self._entries, self._roles, preset["targets"])
+        result = composition.compare(
+            self._entries, self._roles, preset["targets"], preset.get("archetype_targets")
+        )
 
         self.comp_tree.clear()
         for role in result["roles"]:
-            delta = role["delta"]
-            if delta == 0:
-                status, colour = "on target", "#2e7d32"
-            elif delta > 0:
-                status, colour = f"over by {delta}", "#f9a825"
-            else:
-                status, colour = f"need {-delta} more", "#c62828"
-
-            node = QTreeWidgetItem([role["label"], f"{role['have']} / {role['target']}  ·  {status}"])
+            text, colour = self._status_text_colour(role["have"], role["target"], role["delta"])
+            node = QTreeWidgetItem([role["label"], text])
             node.setForeground(1, QColor(colour))
             for build in role["breakdown"]:
-                child = QTreeWidgetItem([f"   {build['archetype']}", str(build["count"])])
+                if "target" in build:
+                    btext, bcolour = self._status_text_colour(
+                        build["count"], build["target"], build["delta"]
+                    )
+                    child = QTreeWidgetItem([f"   {build['archetype']}", btext])
+                    child.setForeground(1, QColor(bcolour))
+                else:
+                    child = QTreeWidgetItem([f"   {build['archetype']}", str(build["count"])])
                 child.setForeground(0, QColor("#b0bec5"))
                 node.addChild(child)
             self.comp_tree.addTopLevelItem(node)

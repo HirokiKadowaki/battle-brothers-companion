@@ -1,6 +1,7 @@
 {
   "_source": "Build guidance (level-up priority, perks, weapons, playstyle) is derived from the user's guide: docs/battle_brothers_guide_2026.md (its 'Build Templates' quick reference and the frontline/backline/late-game perk sections). The numeric requirement thresholds are UNCHANGED and still come from WANG Chenhua's community guide (https://steamcommunity.com/sharedfiles/filedetails/?id=1790093811) — the user's guide is prose and gives no level-11 numbers, and the calculator needs concrete targets to rate recruits.",
   "_guidance_note": "The user's guide has 5 build templates. Shield/2H/Reach/Archer/Sergeant map directly; the 1H Battle-Forged and 1H Nimble-Dodge frontlines are the guide's one-hand/Duelist and Nimble+Dodge variants. Handgonne Man and Thrower are NOT dedicated builds in the guide and are ADAPTED from its ranged and throwing-weapon notes.",
+  "_doomstack_note": "The last 6 archetypes (2H Mace/Axe Frontliner through Thrower/Polearm Hybrid) come from a specific heavy-2H company plan the user supplied as a role table. Their requirement thresholds are taken directly from that table's stat targets (MSKL/MDEF/HP/FAT/RES/RSKL). Weapons are from the table; perks and level-up order are derived from the matching build style. 'MDEF 45+ base' etc. are base attributes, which is what the calculator projects (no gear modelled).",
   "_stat_key_legend": {
     "matk": "melee_skill",
     "ratk": "ranged_skill",
@@ -186,6 +187,96 @@
         "key_perks": ["Quick Hands", "Fast Adaptation", "Overwhelm", "Berserk", "Killing Frenzy", "Nimble", "Recover", "Colossus"],
         "weapons": ["Javelins / throwing axes (burst)", "Backup melee weapon"],
         "playstyle": "Adapted (the source guide treats throwing weapons as burst utility rather than a dedicated build). Short-range burst damage; Quick Hands lets a frontliner or backliner throw a volley then swap back to a melee weapon when the enemy arrives."
+      }
+    },
+    {
+      "name": "2H Mace / 2H Axe Frontliner",
+      "requirements": [
+        { "stat": "melee_skill", "min": 85 },
+        { "stat": "melee_defense", "min": 35 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "fatigue", "min": 130 }
+      ],
+      "guidance": {
+        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
+        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Battle Forged", "Brawny", "Steel Brow", "Fearsome", "Recover", "Nine Lives"],
+        "weapons": ["2H Rusty Axe (barbarian - cleave + bleed)", "2H Mace (stun / daze)"],
+        "playstyle": "The bulk of the heavy-2H line. The rusty (barbarian) two-handed axe cleaves and bleeds; the two-handed mace stuns and dazes. Battle Forged + heavy plate to tank, Brawny to keep fatigue workable while swinging every turn."
+      }
+    },
+    {
+      "name": "2H Hammer Flanker",
+      "requirements": [
+        { "stat": "melee_skill", "min": 90 },
+        { "stat": "melee_defense", "min": 40 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "fatigue", "min": 135 }
+      ],
+      "guidance": {
+        "level_up_priority": ["melee_skill", "melee_defense", "hp", "fatigue"],
+        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Battle Forged", "Brawny", "Steel Brow", "Fearsome", "Recover", "Nine Lives"],
+        "weapons": ["2H Great Hammer (armor smash + knockback)"],
+        "playstyle": "Top-skill armor breaker (90+ melee skill). Flanks to smash the most heavily armored enemies and knock them out of formation, opening them for the rest of the line. Wants the highest melee skill and fatigue of the frontline."
+      }
+    },
+    {
+      "name": "2H Cleaver / Whip Utility",
+      "requirements": [
+        { "stat": "melee_skill", "min": 90 },
+        { "stat": "melee_defense", "min": 35 },
+        { "stat": "hp", "min": 85 },
+        { "stat": "fatigue", "min": 140 }
+      ],
+      "guidance": {
+        "level_up_priority": ["melee_skill", "hp", "melee_defense", "fatigue"],
+        "key_perks": ["Colossus", "Berserk", "Killing Frenzy", "Battle Forged", "Brawny", "Reach Advantage", "Steel Brow", "Recover", "Nine Lives"],
+        "weapons": ["2H Crypt Cleaver (bleed, hits twice)", "Disarm Whip (strip enemy weapons)"],
+        "playstyle": "Utility bruiser. The two-handed cleaver double-hits and stacks bleed; swap to the whip to disarm dangerous enemies (chosen, warlords). The highest fatigue demand (140) of the company because it weapon-swaps and swings twice a turn."
+      }
+    },
+    {
+      "name": "Dedicated Flank Tank",
+      "requirements": [
+        { "stat": "melee_defense", "min": 45 },
+        { "stat": "hp", "min": 100 },
+        { "stat": "fatigue", "min": 135 },
+        { "stat": "resolve", "min": 60 }
+      ],
+      "guidance": {
+        "level_up_priority": ["melee_defense", "hp", "fatigue", "resolve"],
+        "key_perks": ["Colossus", "Battle Forged", "Shield Expert", "Steel Brow", "Rotation", "Footwork", "Fortified Mind", "Underdog", "Nine Lives"],
+        "weapons": ["1H Spear (Spearwall, +hit chance)", "Heavy Shield (Kite / Heater)"],
+        "playstyle": "A pure defensive anchor with 45+ base melee defense before shield. Spearwall plus a heavy shield lets him hold a flank against several attackers at once; Riposte/Spearwall punishes them while Rotation keeps him fresh. Minimal offense by design - his job is to not die and not be flanked around."
+      }
+    },
+    {
+      "name": "Backline Sergeant",
+      "requirements": [
+        { "stat": "resolve", "min": 100 },
+        { "stat": "melee_skill", "min": 75 },
+        { "stat": "hp", "min": 80 },
+        { "stat": "fatigue", "min": 120 }
+      ],
+      "guidance": {
+        "level_up_priority": ["resolve", "melee_skill", "hp", "fatigue"],
+        "key_perks": ["Fortified Mind", "Rally the Troops", "Colossus", "Battle Forged", "Rotation", "Steel Brow", "Footwork", "Nine Lives"],
+        "weapons": ["Company Banner (resolve aura)", "Billhook / Disarm Whip (second-rank reach utility)"],
+        "playstyle": "A very-high-resolve (100+) morale anchor that also contributes from the back with a billhook or whip. Rally the Troops reverses a panic spiral; the 75+ melee skill is enough to reliably break nets, free allies, and land reach hits."
+      }
+    },
+    {
+      "name": "Thrower / Polearm Hybrid",
+      "requirements": [
+        { "stat": "ranged_skill", "min": 90 },
+        { "stat": "melee_skill", "min": 75 },
+        { "stat": "hp", "min": 75 },
+        { "stat": "fatigue", "min": 120 }
+      ],
+      "guidance": {
+        "level_up_priority": ["ranged_skill", "melee_skill", "hp", "fatigue"],
+        "key_perks": ["Quick Hands", "Bullseye", "Fast Adaptation", "Overwhelm", "Berserk", "Killing Frenzy", "Nimble", "Recover"],
+        "weapons": ["Heavy Javelins / Throwing Axes (burst)", "Billhook (second-rank reach)"],
+        "playstyle": "A flexible backliner: opens with heavy throwing weapons, then uses Quick Hands to swap to a billhook and strike from the second rank once enemies close. Wants both strong ranged (90+) and decent melee (75+) skill to do either job well."
       }
     }
   ]

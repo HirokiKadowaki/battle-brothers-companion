@@ -44,13 +44,18 @@ def all_presets() -> tuple:
     return roles, presets + load_custom_presets()
 
 
-def compare(entries: list, roles: list, targets: dict) -> dict:
+def compare(entries: list, roles: list, targets: dict, archetype_targets: dict = None) -> dict:
     """Tally a roster against target role counts.
 
     Returns {"roles": [...], "unassigned": int, "total": int}, where each role
     carries its target, actual count, delta, and the per-archetype breakdown of
     who is filling it.
+
+    If `archetype_targets` (a {archetype_name: target_count} map) is given, each
+    breakdown row also carries its own target/delta, and an archetype with a
+    target is listed even when you have none of it yet (so a gap is visible).
     """
+    archetype_targets = archetype_targets or {}
     counts = {}
     for entry in entries:
         archetype = entry.get("archetype")
@@ -59,21 +64,28 @@ def compare(entries: list, roles: list, targets: dict) -> dict:
     result = []
     accounted = 0
     for role in roles:
-        breakdown = [
-            {"archetype": a, "count": counts.get(a, 0)}
-            for a in role["archetypes"]
-            if counts.get(a, 0) > 0
-        ]
-        have = sum(b["count"] for b in breakdown)
-        accounted += have
+        breakdown = []
+        for a in role["archetypes"]:
+            have = counts.get(a, 0)
+            arch_target = archetype_targets.get(a)
+            if have == 0 and not arch_target:
+                continue
+            row = {"archetype": a, "count": have}
+            if arch_target is not None:
+                row["target"] = int(arch_target)
+                row["delta"] = have - int(arch_target)
+            breakdown.append(row)
+
+        have_total = sum(counts.get(a, 0) for a in role["archetypes"])
+        accounted += have_total
         target = int(targets.get(role["key"], 0))
         result.append(
             {
                 "key": role["key"],
                 "label": role["label"],
                 "target": target,
-                "have": have,
-                "delta": have - target,
+                "have": have_total,
+                "delta": have_total - target,
                 "breakdown": breakdown,
             }
         )
